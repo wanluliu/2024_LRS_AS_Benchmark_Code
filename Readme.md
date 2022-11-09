@@ -1,6 +1,8 @@
 # Readme for `2022_TGS_AS_Benchmark`
 
-This repository contains code for [LINK_TODO](TODO).
+This repository contains code for article [Comprehensive Assessment of Isoform Detection Methods for Third-Generation Sequencing Data](https://doi.org/10.21203/rs.3.rs-2156731/v1).
+
+WARNING: The code here are snapshot of the latest working version of the article, and some software used in this was still under **internal** active development. The behaviour of those software might be changed in later versions.
 
 Directories:
 
