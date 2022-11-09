@@ -1,0 +1,6 @@
+# Some test data of FLAMES
+/SIRV_*
+/brain_*
+*.json
+!config.json
+!bulk_long_pipeline.py.sh

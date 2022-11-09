@@ -1,0 +1,53 @@
+name: unagi
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - biopython=1.70=np112py36_1
+  - blas=1.0=mkl
+  - ca-certificates=2021.10.8=ha878542_0
+  - freetype=2.10.4=h0708190_1
+  - intel-openmp=2022.0.1=h06a4308_3633
+  - jbig=2.1=h7f98852_2003
+  - jpeg=9e=h7f98852_0
+  - lcms2=2.12=hddcbb42_0
+  - ld_impl_linux-64=2.36.1=hea4e1c9_2
+  - lerc=3.0=h9c3ff4c_0
+  - libdeflate=1.10=h7f98852_0
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=11.2.0=h1d223b6_12
+  - libgfortran-ng=7.5.0=h14aa051_20
+  - libgfortran4=7.5.0=h14aa051_20
+  - libgomp=11.2.0=h1d223b6_12
+  - libnsl=2.0.0=h7f98852_0
+  - libpng=1.6.37=h21135ba_2
+  - libstdcxx-ng=11.2.0=he4da1e4_12
+  - libtiff=4.3.0=h542a066_3
+  - libwebp-base=1.2.2=h7f98852_1
+  - libzlib=1.2.11=h36c2ea0_1013
+  - lz4-c=1.9.3=h9c3ff4c_1
+  - mkl=2018.0.3=1
+  - mmtf-python=1.1.2=py_0
+  - msgpack-python=1.0.2=py36h605e78d_1
+  - ncurses=6.3=h9c3ff4c_0
+  - numpy=1.12.1=py36he24570b_1
+  - olefile=0.46=pyh9f0ad1d_1
+  - openjpeg=2.4.0=hb52868f_1
+  - openssl=1.1.1l=h7f98852_0
+  - pillow=8.3.2=py36h676a545_0
+  - pip=21.3.1=pyhd8ed1ab_0
+  - python=3.6.15=hb7a2778_0_cpython
+  - python_abi=3.6=2_cp36m
+  - readline=8.1=h46c0cb4_0
+  - reportlab=3.5.68=py36h3e18861_0
+  - setuptools=58.0.4=py36h5fab9bb_2
+  - sqlite=3.37.0=h9cd32fc_0
+  - tk=8.6.12=h27826a3_0
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - xz=5.2.5=h516909a_1
+  - zlib=1.2.11=h36c2ea0_1013
+  - zstd=1.5.2=ha95c52a_0
+prefix: /mnt/volume1/TGS/TGSBackup/miniconda3/envs/unagi

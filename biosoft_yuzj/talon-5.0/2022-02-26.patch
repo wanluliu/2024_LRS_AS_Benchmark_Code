@@ -1,0 +1,16 @@
+diff --git a/src/talon/initialize_talon_database.py b/src/talon/initialize_talon_database.py
+index 96f58ce..918b989 100644
+--- a/src/talon/initialize_talon_database.py
++++ b/src/talon/initialize_talon_database.py
+@@ -60,8 +60,9 @@ def create_database(path):
+     except Error as e:
+         print(e)
+     finally:
+-        conn.commit()
+-        conn.close()
++        pass
++        # conn.commit()
++        # conn.close()
+ 
+     return
+ 

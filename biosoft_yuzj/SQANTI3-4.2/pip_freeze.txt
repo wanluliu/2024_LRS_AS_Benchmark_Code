@@ -1,0 +1,19 @@
+bcbio-gff==0.6.6
+biopython @ file:///home/conda/feedstock_root/build_artifacts/biopython_1636053343550/work
+bx-python @ file:///opt/conda/conda-bld/bx-python_1645576007243/work
+cupcake==28.0.0
+Cython @ file:///tmp/build/80754af9/cython_1639456455454/work
+joblib==1.1.0
+numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1643958805922/work
+pandas==1.4.1
+psutil @ file:///home/conda/feedstock_root/build_artifacts/psutil_1640887138049/work
+pybedtools==0.9.0
+pysam==0.17.0
+python-dateutil @ file:///home/conda/feedstock_root/build_artifacts/python-dateutil_1626286286081/work
+python-lzo @ file:///home/conda/feedstock_root/build_artifacts/python-lzo_1640795493042/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1633452062248/work
+scikit-learn==1.0.2
+scipy @ file:///home/conda/feedstock_root/build_artifacts/scipy_1644357253444/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+sklearn==0.0
+threadpoolctl==3.1.0

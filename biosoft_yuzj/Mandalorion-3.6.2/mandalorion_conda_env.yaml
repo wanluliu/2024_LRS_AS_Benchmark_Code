@@ -1,0 +1,14 @@
+name: mandalorion
+channels:
+  - bioconda
+  - default
+dependencies:
+  - python=3.7 
+  - mappy
+  - abpoa
+  - minimap2
+  - racon
+  - numpy
+  - cython=0.29.28
+  - pip:
+    - pyabpoa=1.0.2

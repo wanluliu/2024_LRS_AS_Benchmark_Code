@@ -1,0 +1,9 @@
+name: traphlor_py
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=2.7
+  - numpy
+  - pysam

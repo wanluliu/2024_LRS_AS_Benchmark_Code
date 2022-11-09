@@ -1,0 +1,2 @@
+FLAME-Full-Length-Adjecency-Matrix-Enumeration @ file:///data1/biosoft_yuzj/flame-0.3.1/flame-src
+pysam==0.16.0.1

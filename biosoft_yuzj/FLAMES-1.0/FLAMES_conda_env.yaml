@@ -1,0 +1,13 @@
+name: FLAMES
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - editdistance=0.5.3=py27he1b5a44_0
+  - htslib=1.12=h9093b5e_1
+  - minimap2=2.20=h5bf99c6_0
+  - numpy=1.16.5=py27h95a1406_0
+  - pysam=0.16.0.1=py27hc729bab_3
+  - python=2.7
+  - samtools=1.12=h9aed4be_1

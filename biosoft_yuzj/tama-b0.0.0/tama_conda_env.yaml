@@ -1,0 +1,18 @@
+name: tama
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - biopython=1.79=py37h5e8e339_0
+  - curl=7.71.1=hbc83047_1
+  - krb5=1.18.2=h173b8e3_0
+  - ncurses=6.2=he6710b0_1
+  - numpy=1.21.0=py37h038b26d_0
+  - openssl=1.1.1k=h7f98852_0
+  - pip=21.1.2=py37h06a4308_0
+  - pysam=0.15.3=py37hda2845c_1
+  - python=3.7.10=h12debd9_4
+  - pip:
+    - gff3tool==2.0.3
+

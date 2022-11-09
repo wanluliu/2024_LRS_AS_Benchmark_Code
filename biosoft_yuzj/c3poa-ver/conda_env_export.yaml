@@ -1,0 +1,47 @@
+name: c3poa
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - blat=36=0
+  - ca-certificates=2021.10.8=ha878542_0
+  - cython=0.29.24=py36hc4f0c31_0
+  - editdistance=0.5.3=py36h2531618_0
+  - ld_impl_linux-64=2.36.1=hea4e1c9_2
+  - libblas=3.9.0=13_linux64_openblas
+  - libcblas=3.9.0=13_linux64_openblas
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=11.2.0=h1d223b6_12
+  - libgfortran-ng=11.2.0=h69a702a_12
+  - libgfortran5=11.2.0=h5c6108e_12
+  - libgomp=11.2.0=h1d223b6_12
+  - liblapack=3.9.0=13_linux64_openblas
+  - libnsl=2.0.0=h7f98852_0
+  - libopenblas=0.3.18=pthreads_h8fe5266_0
+  - libpng=1.6.37=h21135ba_2
+  - libstdcxx-ng=11.2.0=he4da1e4_12
+  - libzlib=1.2.11=h36c2ea0_1013
+  - mappy=2.24=py36haf49e46_1
+  - ncurses=6.3=h9c3ff4c_0
+  - numpy=1.19.5=py36hfc0c790_2
+  - openssl=1.1.1l=h7f98852_0
+  - pip=21.3.1=pyhd8ed1ab_0
+  - python=3.6.15=hb7a2778_0_cpython
+  - python_abi=3.6=2_cp36m
+  - racon=1.4.20=hd03093a_2
+  - readline=8.1=h46c0cb4_0
+  - scipy=1.5.3=py36h81d768a_1
+  - setuptools=58.0.4=py36h5fab9bb_2
+  - sqlite=3.37.0=h9cd32fc_0
+  - tk=8.6.12=h27826a3_0
+  - tqdm=4.7.2=py36_0
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - xz=5.2.5=h516909a_1
+  - zlib=1.2.11=h36c2ea0_1013
+  - pip:
+    - conk==1.0.0
+    - pyabpoa==1.0.5
+prefix: /mnt/volume1/TGS/TGSBackup/miniconda3/envs/c3poa

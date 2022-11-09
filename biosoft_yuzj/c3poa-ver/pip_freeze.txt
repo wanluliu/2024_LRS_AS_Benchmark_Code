@@ -1,0 +1,8 @@
+conk @ file:///data1/biosoft_yuzj/c3poa-ver/conk-src
+Cython @ file:///home/conda/feedstock_root/build_artifacts/cython_1626221489214/work
+editdistance @ file:///tmp/build/80754af9/editdistance_1605215813244/work
+mappy==2.24
+numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1626681920064/work
+pyabpoa==1.0.5
+scipy @ file:///home/conda/feedstock_root/build_artifacts/scipy_1629411471490/work
+tqdm==4.7.2

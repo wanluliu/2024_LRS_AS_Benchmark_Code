@@ -1,0 +1,12 @@
+name: NanoAsPipe
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - perl=5.32.1
+  - perl-list-moreutils=0.430
+  - graphmap=0.5.2
+  - samtools=0.1.19
+  - porechop==0.2.4 # Required is 0.2.1
+  - bedtools=2.25.0

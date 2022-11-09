@@ -1,0 +1,11 @@
+name: IsoCon
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.6
+  - python-edlib=1.2.3 # Should be 1.1.2
+  - pysam=0.11
+  - networkx=1.11 # Should be 1.10
+  - parasail-python=1.1.12 # Should be 1.1.10

@@ -1,0 +1,30 @@
+backports-abc==0.5
+backports.functools-lru-cache==1.6.1
+certifi==2019.11.28
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+cycler==0.10.0
+Cython==0.29.15
+functools32==3.2.3.post2
+futures==3.3.0
+intervaltree==2.1.0
+kerneltree @ file:///opt/conda/conda-bld/kerneltree_1616778596440/work
+kiwisolver==1.1.0
+matplotlib==2.2.3
+ncls @ file:///opt/conda/conda-bld/ncls_1645588150427/work
+numpy==1.9.3
+pandas==0.23.4
+patsy==0.5.1
+pybedtools==0.8.2
+pyparsing==2.4.7
+pysam==0.18.0
+python-dateutil==2.8.1
+pytz==2020.1
+scipy==1.2.1
+seaborn==0.9.0
+singledispatch @ file:///home/conda/feedstock_root/build_artifacts/singledispatch_1614388326733/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+sortedcontainers==1.4.4
+statsmodels==0.9.0
+subprocess32==3.5.4
+tornado==5.1.1
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1632160078689/work

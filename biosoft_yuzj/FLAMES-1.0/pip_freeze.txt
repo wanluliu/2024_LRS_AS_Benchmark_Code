@@ -1,0 +1,4 @@
+certifi==2019.11.28
+editdistance==0.5.3
+numpy==1.16.5
+pysam==0.16.0.1

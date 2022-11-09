@@ -1,0 +1,46 @@
+name: tama
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - biopython=1.79=py37h5e8e339_0
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2021.10.8=ha878542_0
+  - curl=7.71.1=hbc83047_1
+  - krb5=1.18.2=h173b8e3_0
+  - ld_impl_linux-64=2.36.1=hea4e1c9_2
+  - libblas=3.9.0=13_linux64_openblas
+  - libcblas=3.9.0=13_linux64_openblas
+  - libcurl=7.71.1=h20c2e04_1
+  - libdeflate=1.0=h14c3975_1
+  - libedit=3.1.20191231=he28a2e2_2
+  - libffi=3.3=h58526e2_2
+  - libgcc-ng=11.2.0=h1d223b6_12
+  - libgfortran-ng=11.2.0=h69a702a_12
+  - libgfortran5=11.2.0=h5c6108e_12
+  - libgomp=11.2.0=h1d223b6_12
+  - liblapack=3.9.0=13_linux64_openblas
+  - libopenblas=0.3.18=pthreads_h8fe5266_0
+  - libssh2=1.10.0=ha56f1ee_0
+  - libstdcxx-ng=11.2.0=he4da1e4_12
+  - libzlib=1.2.11=h36c2ea0_1013
+  - ncurses=6.2=he6710b0_1
+  - numpy=1.21.0=py37h038b26d_0
+  - openssl=1.1.1k=h7f98852_0
+  - pip=21.1.2=py37h06a4308_0
+  - pysam=0.15.3=py37hda2845c_1
+  - python=3.7.10=h12debd9_4
+  - python_abi=3.7=2_cp37m
+  - readline=8.1=h46c0cb4_0
+  - setuptools=60.9.3=py37h89c1867_0
+  - sqlite=3.37.0=h9cd32fc_0
+  - tk=8.6.12=h27826a3_0
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - xz=5.2.5=h516909a_1
+  - zlib=1.2.11=h36c2ea0_1013
+  - pip:
+    - gff3tool==2.0.3
+prefix: /mnt/volume1/TGS/TGSBackup/miniconda3/envs/tama

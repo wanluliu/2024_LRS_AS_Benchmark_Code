@@ -1,0 +1,1765 @@
+diff --git a/tama_collapse.py b/tama_collapse.py
+index 7ee51ec..c3896b1 100755
+--- a/tama_collapse.py
++++ b/tama_collapse.py
+@@ -4,7 +4,8 @@ import re
+ import sys
+ import time
+ from Bio import SeqIO
+-from StringIO import StringIO
++# from StringIO import StringIO
++from io import StringIO
+ from Bio import AlignIO
+ import os
+ import argparse
+@@ -371,7 +372,7 @@ def mapped_seq_length(cigar):
+     [cig_dig_list,cig_char_list] = cigar_list(cigar)
+     map_seq_length = 0
+     
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         if cig_flag == "H":
+@@ -403,7 +404,7 @@ def trans_coordinates(start_pos,cigar):
+ 
+     exon_start_list.append(int(start_pos))
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         if cig_flag == "H":
+@@ -517,7 +518,7 @@ def mismatch_seq(genome_seq,query_seq,genome_pos,seq_pos):
+     seq_mismatch_list = []
+     nuc_mismatch_list = []
+     
+-    for i in xrange(len(genome_seq)):
++    for i in range(len(genome_seq)):
+ 
+         genome_nuc = genome_seq[i]
+         read_nuc = query_seq[i]
+@@ -602,7 +603,7 @@ def calc_error_rate(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+     
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         #print(seq_pos)
+@@ -671,7 +672,7 @@ def calc_error_rate(start_pos,cigar,seq_list,scaffold,read_id):
+             all_nuc_mismatch_list.extend(nuc_mismatch_list)
+             
+             ### for variation detection start
+-            for mismatch_index in xrange(len(seq_mismatch_list)):
++            for mismatch_index in range(len(seq_mismatch_list)):
+                 var_pos = genome_mismatch_list[mismatch_index]
+                 seq_var_pos = seq_mismatch_list[mismatch_index]
+                 var_seq = seq_list[seq_var_pos]
+@@ -1008,7 +1009,7 @@ def calc_variation(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+ 
+         #print(seq_pos)
+@@ -1074,7 +1075,7 @@ def calc_variation(start_pos,cigar,seq_list,scaffold,read_id):
+ 
+ 
+             ### for variation detection start
+-            for mismatch_index in xrange(len(seq_mismatch_list)):
++            for mismatch_index in range(len(seq_mismatch_list)):
+                 var_pos = genome_mismatch_list[mismatch_index]
+                 seq_var_pos = seq_mismatch_list[mismatch_index]
+                 var_seq = seq_list[seq_var_pos]
+@@ -1182,7 +1183,7 @@ def calc_error_rate_lowmem(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+ 
+         #print(seq_pos)
+@@ -1581,7 +1582,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+ 
+-        for exon_index in xrange(len(self.exon_start_list)):
++        for exon_index in range(len(self.exon_start_list)):
+             exon_start_string_list.append(str(self.exon_start_list[exon_index]))
+             exon_end_string_list.append(str(self.exon_end_list[exon_index]))
+ 
+@@ -1602,7 +1603,7 @@ class Transcript:
+         self.sj_hash = 0
+ 
+ 
+-        for exon_index in xrange(len(self.exon_start_list)-1):
++        for exon_index in range(len(self.exon_start_list)-1):
+             self.sj_hash = self.sj_hash + (self.exon_start_list[exon_index+1] * self.exon_end_list[exon_index])
+ 
+ 
+@@ -1671,7 +1672,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+         
+-        for i in xrange(len(self.exon_start_list)):
++        for i in range(len(self.exon_start_list)):
+             
+             exon_start_string_list.append(str(self.exon_start_list[i]))
+             exon_end_string_list.append(str(self.exon_end_list[i]))
+@@ -1712,7 +1713,7 @@ class Transcript:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.exon_start_list[i]
+             exon_end = self.exon_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -1826,7 +1827,7 @@ class Merged:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.collapse_start_list[i]
+             exon_end = self.collapse_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -1903,7 +1904,7 @@ class Merged:
+         
+         start_wobble_string_list = []
+         end_wobble_string_list = []
+-        for i in xrange(len(self.start_wobble_list)):
++        for i in range(len(self.start_wobble_list)):
+             start_wobble_string = str(self.start_wobble_list[i])
+             start_wobble_string_list.append(start_wobble_string)
+             end_wobble_string = str(self.end_wobble_list[i])
+@@ -1917,7 +1918,7 @@ class Merged:
+ 
+         collapse_sj_start_err_list_str = []
+         collapse_sj_end_err_list_str = []
+-        for i in xrange(len(self.collapse_sj_start_err_list)):
++        for i in range(len(self.collapse_sj_start_err_list)):
+             collapse_sj_start_err_list_str.append(str(self.collapse_sj_start_err_list[i]))
+             collapse_sj_end_err_list_str.append(str(self.collapse_sj_end_err_list[i]))
+ 
+@@ -2183,7 +2184,7 @@ def compare_transcripts(trans_obj,o_trans_obj,fiveprime_cap_flag,strand): #use t
+         
+         all_match_flag = 1 # 1 if all matching and 0 if at least one not matching
+         
+-        for i in xrange(min_exon_num):
++        for i in range(min_exon_num):
+             
+             if strand == "+":
+                 j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+@@ -2615,15 +2616,15 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             mismatch_position = int(sj_pre_error_string.split(".")[0])
+             mismatch_position += 1
+             if sj_pre_error_count == 1:
+-                for j in xrange(mismatch_position - 1):
++                for j in range(mismatch_position - 1):
+                     sj_pre_error_simple_list.append(ses_match_char)
+                     sj_pre_error_count += 1
+                 sj_pre_error_simple_list.append("X")
+                 sj_pre_error_count += 1
+             elif sj_pre_error_count > 1:
+                 m_pos_diff = mismatch_position - sj_pre_error_count
+-                # for j in xrange(m_pos_diff-1):
+-                for j in xrange(m_pos_diff):
++                # for j in range(m_pos_diff-1):
++                for j in range(m_pos_diff):
+                     sj_pre_error_simple_list.append(ses_match_char)
+                     sj_pre_error_count += 1
+                 sj_pre_error_simple_list.append("X")
+@@ -2631,7 +2632,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+         elif len(sj_pre_error_string.split(".")) == 1:
+ 
+             if sj_pre_error_string == "0":
+-                for j in xrange(sj_err_threshold):
++                for j in range(sj_err_threshold):
+                     sj_pre_error_simple_list.append(ses_match_char)
+ 
+             else:
+@@ -2641,23 +2642,23 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+                 cig_char = cig_char_list[0]
+ 
+                 if cig_char == "M":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append(ses_match_char)
+                         sj_pre_error_count += 1
+                 elif cig_char == "I":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("I")
+                         sj_pre_error_count += 1
+                 elif cig_char == "D":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("D")
+                         sj_pre_error_count += 1
+                 elif cig_char == "S":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("S")
+                         sj_pre_error_count += 1
+                 elif cig_char == "H":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("H")
+                         sj_pre_error_count += 1
+         else:
+@@ -2665,7 +2666,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             sys.exit()
+ 
+     if len(sj_pre_error_simple_list) < sj_err_threshold:
+-        for j in xrange(sj_err_threshold - len(sj_pre_error_simple_list)):
++        for j in range(sj_err_threshold - len(sj_pre_error_simple_list)):
+             sj_pre_error_simple_list.append(ses_match_char)
+ 
+     sj_pre_error_simple_list_reverse = sj_pre_error_simple_list
+@@ -2685,15 +2686,15 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             mismatch_position = int(sj_post_error_string.split(".")[0])
+             mismatch_position += 1
+             if sj_post_error_count == 1:
+-                for j in xrange(mismatch_position - 1):
++                for j in range(mismatch_position - 1):
+                     sj_post_error_simple_list.append(ses_match_char)
+                     sj_post_error_count += 1
+                 sj_post_error_simple_list.append("X")
+                 sj_post_error_count += 1
+             elif sj_post_error_count > 1:
+                 m_pos_diff = mismatch_position - sj_post_error_count
+-                # for j in xrange(m_pos_diff-1):
+-                for j in xrange(m_pos_diff):
++                # for j in range(m_pos_diff-1):
++                for j in range(m_pos_diff):
+                     sj_post_error_simple_list.append(ses_match_char)
+                     sj_post_error_count += 1
+                 sj_post_error_simple_list.append("X")
+@@ -2702,7 +2703,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+         elif len(sj_post_error_string.split(".")) == 1:
+ 
+             if sj_post_error_string == "0":
+-                for j in xrange(sj_err_threshold):
++                for j in range(sj_err_threshold):
+                     sj_post_error_simple_list.append(ses_match_char)
+ 
+             else:
+@@ -2712,23 +2713,23 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+                 cig_char = cig_char_list[0]
+ 
+                 if cig_char == "M":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append(ses_match_char)
+                         sj_post_error_count += 1
+                 elif cig_char == "I":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("I")
+                         sj_post_error_count += 1
+                 elif cig_char == "D":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("D")
+                         sj_post_error_count += 1
+                 elif cig_char == "S":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("S")
+                         sj_post_error_count += 1
+                 elif cig_char == "H":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("H")
+                         sj_post_error_count += 1
+         else:
+@@ -2736,7 +2737,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             sys.exit()
+ 
+     if len(sj_post_error_simple_list) < sj_err_threshold:
+-        for j in xrange(sj_err_threshold - len(sj_post_error_simple_list)):
++        for j in range(sj_err_threshold - len(sj_post_error_simple_list)):
+             sj_post_error_simple_list.append(ses_match_char)
+ 
+     sj_post_error_simple_string = "".join(sj_post_error_simple_list)
+@@ -2787,7 +2788,7 @@ def sj_error_local_density(trans_obj):
+ 
+     all_sj_both_error_simple_list = []
+ 
+-    for i in xrange(max_exon_num-1):
++    for i in range(max_exon_num-1):
+         
+         this_bad_sj_flag = 0
+ 
+@@ -3033,7 +3034,7 @@ def collapse_transcripts(trans_obj_list,fiveprime_cap_flag,collapse_flag): #use
+     #track how much wobble for the starts and end in the collapse
+     start_wobble_list = []
+     end_wobble_list = []
+-    for i in xrange(max_exon_num): #go from 3 prime end
++    for i in range(max_exon_num): #go from 3 prime end
+         if strand == "+":
+             j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+         elif strand == "-":
+@@ -3307,7 +3308,7 @@ def collapse_transcripts(trans_obj_list,fiveprime_cap_flag,collapse_flag): #use
+     #Below: check start and end list to make sure there are no overlapping coordinates
+     prev_start = -1
+     prev_end = -1
+-    for i in xrange(len(collapse_start_list)):
++    for i in range(len(collapse_start_list)):
+         check_start = collapse_start_list[i]
+         check_end = collapse_end_list[i]
+         
+@@ -3380,9 +3381,9 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+         trans_gene_dict[trans_id] = gene_count
+         
+     
+-    for i in xrange(len(trans_obj_list)):
++    for i in range(len(trans_obj_list)):
+         trans_obj = trans_obj_list[i]
+-        for j in xrange(i+1,len(trans_obj_list)):
++        for j in range(i+1,len(trans_obj_list)):
+             o_trans_obj = trans_obj_list[j]
+ 
+             trans_id  = trans_obj.cluster_id
+@@ -3406,8 +3407,8 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+             
+             overlap_flag = 0
+             
+-            for i in xrange(num_exons): #search for overlapping exons
+-                for j in xrange(o_num_exons):
++            for i in range(num_exons): #search for overlapping exons
++                for j in range(o_num_exons):
+                     exon_start = exon_start_list[i]
+                     exon_end = exon_end_list[i]
+                     o_exon_start = o_exon_start_list[j]
+@@ -3511,7 +3512,7 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+             sys.exit()
+         start_gene_dict[gene_start] = gene_num
+     
+-    start_gene_list = start_gene_dict.keys()
++    start_gene_list = list(start_gene_dict.keys())
+     start_gene_list.sort()
+     
+     gene_start_trans_dict = {} # gene_start_trans_dict[gene start][trans id] = 1
+@@ -3541,7 +3542,7 @@ def iterate_sort_list(list_trans_pos_list,pos_index):
+         same_order_index_dict = {}  # same_order_index_dict[pos][index] = 1
+ 
+         # collect positions and index where the sort was equal
+-        for j in xrange(len(list_trans_pos_list)):
++        for j in range(len(list_trans_pos_list)):
+ 
+             trans_pos_line_split = list_trans_pos_list[j]
+             pos_element = trans_pos_line_split[pos_index]
+@@ -3620,7 +3621,7 @@ def sort_pos_trans_list(pos_trans_list,pos_trans_dict):
+         diff_pos = max_pos_num - len(trans_pos_line_split)
+ 
+         # pad out list so all pos lists have same number of elements
+-        for i in xrange(diff_pos):
++        for i in range(diff_pos):
+             trans_pos_line_split.append(0)
+ 
+         trans_pos_line_split_str = []
+@@ -3689,7 +3690,7 @@ def sort_transcripts(trans_obj_list):
+ 
+         num_exons = len(trans_exon_start_list)
+ 
+-        for i in xrange(num_exons):
++        for i in range(num_exons):
+             exon_start = trans_exon_start_list[i]
+             trans_pos_list.append(str(exon_start))
+             trans_pos_list.append(",")
+@@ -4916,7 +4917,7 @@ def detect_rt_switch(trans_obj): # looks for complementary structure in intronic
+     
+     bind_seq_dict = {} # bind_seq_dict[splice junction]['end seq'/'start seq'] = seq
+     
+-    for i in xrange(len(this_exon_starts)-1):
++    for i in range(len(this_exon_starts)-1):
+         
+         bind_flag = 0
+         start_index = i + 1
+@@ -4927,12 +4928,12 @@ def detect_rt_switch(trans_obj): # looks for complementary structure in intronic
+         rev_comp_end_seq = reverse_complement(end_seq)
+         
+         binding_dict = {} # binding_dict[bind seq] = 1
+-        for j in xrange(rt_window-bind_length):
++        for j in range(rt_window-bind_length):
+             bind_seq = start_seq[j:j+bind_length]
+             bind_seq_string = "".join(bind_seq)
+             binding_dict[bind_seq_string] = 1
+         
+-        for j in xrange(rt_window-bind_length):
++        for j in range(rt_window-bind_length):
+             bind_seq = rev_comp_end_seq[j:j+bind_length]
+             bind_seq_string = "".join(bind_seq)
+             if bind_seq_string in binding_dict:
+@@ -5373,7 +5374,7 @@ if run_mode_flag == "original":
+ 
+     multimap_missing_group_flag = 0
+ 
+-    for i in xrange(total_group_count+1):
++    for i in range(total_group_count+1):
+ 
+         if i not in group_trans_list_dict:
+             print("Missing group num, check for multi-maps in SAM file")
+@@ -5412,7 +5413,7 @@ if run_mode_flag == "original":
+ 
+             this_exon_start_list = trans_obj.exon_start_list
+             this_exon_end_list = trans_obj.exon_end_list
+-            for exon_index in xrange(len(this_exon_start_list)):
++            for exon_index in range(len(this_exon_start_list)):
+                 this_exon_start = this_exon_start_list[exon_index]
+                 this_exon_end = this_exon_end_list[exon_index]
+                 for this_coord in range(this_exon_start,this_exon_end):
+@@ -5435,7 +5436,7 @@ if run_mode_flag == "original":
+         for gene_start in reverse_gene_start_trans_dict:
+             all_start_gene_dict[gene_start] = 1
+ 
+-        all_start_list = all_start_gene_dict.keys()
++        all_start_list = list(all_start_gene_dict.keys())
+ 
+         all_start_list.sort()
+ 
+@@ -5508,7 +5509,7 @@ if run_mode_flag == "original":
+                         collapse_start_error_nuc_list = []
+                         collapse_end_error_nuc_list = []
+ 
+-                        for exon_index in xrange(len(exon_start_list)):  # go from 3 prime end
++                        for exon_index in range(len(exon_start_list)):  # go from 3 prime end
+                             e_start_priority, e_end_priority, e_start_priority_error,e_end_priority_error = sj_error_priority_finder(solo_trans_obj, exon_index, max_exon_num)  ####################################
+ 
+                             collapse_sj_start_err_list.append(e_start_priority)
+@@ -5741,7 +5742,7 @@ def process_loci(this_trans_obj_dict,trans_list,this_gene_count):
+     for gene_start in reverse_gene_start_trans_dict:
+         all_start_gene_dict[gene_start] = 1
+ 
+-    all_start_list = all_start_gene_dict.keys()
++    all_start_list = list(all_start_gene_dict.keys())
+ 
+     all_start_list.sort()
+ 
+@@ -5814,7 +5815,7 @@ def process_loci(this_trans_obj_dict,trans_list,this_gene_count):
+                     collapse_start_error_nuc_list = []
+                     collapse_end_error_nuc_list = []
+ 
+-                    for exon_index in xrange(len(exon_start_list)):  # go from 3 prime end
++                    for exon_index in range(len(exon_start_list)):  # go from 3 prime end
+                         e_start_priority, e_end_priority, e_start_priority_error,e_end_priority_error = sj_error_priority_finder(solo_trans_obj, exon_index, max_exon_num)  ####################################
+ 
+                         collapse_sj_start_err_list.append(e_start_priority)
+diff --git a/tama_go/call_variants/tama_variant_caller.py b/tama_go/call_variants/tama_variant_caller.py
+index bf0573f..cd0fb67 100755
+--- a/tama_go/call_variants/tama_variant_caller.py
++++ b/tama_go/call_variants/tama_variant_caller.py
+@@ -4,7 +4,8 @@ import re
+ import sys
+ import time
+ from Bio import SeqIO
+-from StringIO import StringIO
++# from StringIO import StringIO
++from io import StringIO
+ from Bio import AlignIO
+ import os
+ import argparse
+@@ -332,7 +333,7 @@ def mapped_seq_length(cigar):
+     [cig_dig_list,cig_char_list] = cigar_list(cigar)
+     map_seq_length = 0
+     
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         if cig_flag == "H":
+@@ -364,7 +365,7 @@ def trans_coordinates(start_pos,cigar):
+ 
+     exon_start_list.append(int(start_pos))
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         if cig_flag == "H":
+@@ -478,7 +479,7 @@ def mismatch_seq(genome_seq,query_seq,genome_pos,seq_pos):
+     seq_mismatch_list = []
+     nuc_mismatch_list = []
+     
+-    for i in xrange(len(genome_seq)):
++    for i in range(len(genome_seq)):
+ 
+         genome_nuc = genome_seq[i]
+         read_nuc = query_seq[i]
+@@ -563,7 +564,7 @@ def calc_error_rate(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+     
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         #print(seq_pos)
+@@ -635,7 +636,7 @@ def calc_error_rate(start_pos,cigar,seq_list,scaffold,read_id):
+             all_nuc_mismatch_list.extend(nuc_mismatch_list)
+             
+             ### for variation detection start
+-            for mismatch_index in xrange(len(seq_mismatch_list)):
++            for mismatch_index in range(len(seq_mismatch_list)):
+                 var_pos = genome_mismatch_list[mismatch_index]
+                 seq_var_pos = seq_mismatch_list[mismatch_index]
+                 var_seq = seq_list[seq_var_pos]
+@@ -972,7 +973,7 @@ def calc_variation(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+ 
+         #print(seq_pos)
+@@ -1042,7 +1043,7 @@ def calc_variation(start_pos,cigar,seq_list,scaffold,read_id):
+ 
+ 
+             ### for variation detection start
+-            for mismatch_index in xrange(len(seq_mismatch_list)):
++            for mismatch_index in range(len(seq_mismatch_list)):
+                 var_pos = genome_mismatch_list[mismatch_index]
+                 seq_var_pos = seq_mismatch_list[mismatch_index]
+                 var_seq = seq_list[seq_var_pos]
+@@ -1150,7 +1151,7 @@ def calc_error_rate_lowmem(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+ 
+         #print(seq_pos)
+@@ -1549,7 +1550,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+ 
+-        for exon_index in xrange(len(self.exon_start_list)):
++        for exon_index in range(len(self.exon_start_list)):
+             exon_start_string_list.append(str(self.exon_start_list[exon_index]))
+             exon_end_string_list.append(str(self.exon_end_list[exon_index]))
+ 
+@@ -1570,7 +1571,7 @@ class Transcript:
+         self.sj_hash = 0
+ 
+ 
+-        for exon_index in xrange(len(self.exon_start_list)-1):
++        for exon_index in range(len(self.exon_start_list)-1):
+             self.sj_hash = self.sj_hash + (self.exon_start_list[exon_index+1] * self.exon_end_list[exon_index])
+ 
+ 
+@@ -1639,7 +1640,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+         
+-        for i in xrange(len(self.exon_start_list)):
++        for i in range(len(self.exon_start_list)):
+             
+             exon_start_string_list.append(str(self.exon_start_list[i]))
+             exon_end_string_list.append(str(self.exon_end_list[i]))
+@@ -1680,7 +1681,7 @@ class Transcript:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.exon_start_list[i]
+             exon_end = self.exon_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -1794,7 +1795,7 @@ class Merged:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.collapse_start_list[i]
+             exon_end = self.collapse_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -1871,7 +1872,7 @@ class Merged:
+         
+         start_wobble_string_list = []
+         end_wobble_string_list = []
+-        for i in xrange(len(self.start_wobble_list)):
++        for i in range(len(self.start_wobble_list)):
+             start_wobble_string = str(self.start_wobble_list[i])
+             start_wobble_string_list.append(start_wobble_string)
+             end_wobble_string = str(self.end_wobble_list[i])
+@@ -1885,7 +1886,7 @@ class Merged:
+ 
+         collapse_sj_start_err_list_str = []
+         collapse_sj_end_err_list_str = []
+-        for i in xrange(len(self.collapse_sj_start_err_list)):
++        for i in range(len(self.collapse_sj_start_err_list)):
+             collapse_sj_start_err_list_str.append(str(self.collapse_sj_start_err_list[i]))
+             collapse_sj_end_err_list_str.append(str(self.collapse_sj_end_err_list[i]))
+ 
+@@ -2151,7 +2152,7 @@ def compare_transcripts(trans_obj,o_trans_obj,fiveprime_cap_flag,strand): #use t
+         
+         all_match_flag = 1 # 1 if all matching and 0 if at least one not matching
+         
+-        for i in xrange(min_exon_num):
++        for i in range(min_exon_num):
+             
+             if strand == "+":
+                 j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+@@ -2583,15 +2584,15 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             mismatch_position = int(sj_pre_error_string.split(".")[0])
+             mismatch_position += 1
+             if sj_pre_error_count == 1:
+-                for j in xrange(mismatch_position - 1):
++                for j in range(mismatch_position - 1):
+                     sj_pre_error_simple_list.append(ses_match_char)
+                     sj_pre_error_count += 1
+                 sj_pre_error_simple_list.append("X")
+                 sj_pre_error_count += 1
+             elif sj_pre_error_count > 1:
+                 m_pos_diff = mismatch_position - sj_pre_error_count
+-                # for j in xrange(m_pos_diff-1):
+-                for j in xrange(m_pos_diff):
++                # for j in range(m_pos_diff-1):
++                for j in range(m_pos_diff):
+                     sj_pre_error_simple_list.append(ses_match_char)
+                     sj_pre_error_count += 1
+                 sj_pre_error_simple_list.append("X")
+@@ -2599,7 +2600,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+         elif len(sj_pre_error_string.split(".")) == 1:
+ 
+             if sj_pre_error_string == "0":
+-                for j in xrange(sj_err_threshold):
++                for j in range(sj_err_threshold):
+                     sj_pre_error_simple_list.append(ses_match_char)
+ 
+             else:
+@@ -2609,23 +2610,23 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+                 cig_char = cig_char_list[0]
+ 
+                 if cig_char == "M":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append(ses_match_char)
+                         sj_pre_error_count += 1
+                 elif cig_char == "I":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("I")
+                         sj_pre_error_count += 1
+                 elif cig_char == "D":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("D")
+                         sj_pre_error_count += 1
+                 elif cig_char == "S":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("S")
+                         sj_pre_error_count += 1
+                 elif cig_char == "H":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("H")
+                         sj_pre_error_count += 1
+         else:
+@@ -2633,7 +2634,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             sys.exit()
+ 
+     if len(sj_pre_error_simple_list) < sj_err_threshold:
+-        for j in xrange(sj_err_threshold - len(sj_pre_error_simple_list)):
++        for j in range(sj_err_threshold - len(sj_pre_error_simple_list)):
+             sj_pre_error_simple_list.append(ses_match_char)
+ 
+     sj_pre_error_simple_list_reverse = sj_pre_error_simple_list
+@@ -2653,15 +2654,15 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             mismatch_position = int(sj_post_error_string.split(".")[0])
+             mismatch_position += 1
+             if sj_post_error_count == 1:
+-                for j in xrange(mismatch_position - 1):
++                for j in range(mismatch_position - 1):
+                     sj_post_error_simple_list.append(ses_match_char)
+                     sj_post_error_count += 1
+                 sj_post_error_simple_list.append("X")
+                 sj_post_error_count += 1
+             elif sj_post_error_count > 1:
+                 m_pos_diff = mismatch_position - sj_post_error_count
+-                # for j in xrange(m_pos_diff-1):
+-                for j in xrange(m_pos_diff):
++                # for j in range(m_pos_diff-1):
++                for j in range(m_pos_diff):
+                     sj_post_error_simple_list.append(ses_match_char)
+                     sj_post_error_count += 1
+                 sj_post_error_simple_list.append("X")
+@@ -2670,7 +2671,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+         elif len(sj_post_error_string.split(".")) == 1:
+ 
+             if sj_post_error_string == "0":
+-                for j in xrange(sj_err_threshold):
++                for j in range(sj_err_threshold):
+                     sj_post_error_simple_list.append(ses_match_char)
+ 
+             else:
+@@ -2680,23 +2681,23 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+                 cig_char = cig_char_list[0]
+ 
+                 if cig_char == "M":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append(ses_match_char)
+                         sj_post_error_count += 1
+                 elif cig_char == "I":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("I")
+                         sj_post_error_count += 1
+                 elif cig_char == "D":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("D")
+                         sj_post_error_count += 1
+                 elif cig_char == "S":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("S")
+                         sj_post_error_count += 1
+                 elif cig_char == "H":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("H")
+                         sj_post_error_count += 1
+         else:
+@@ -2704,7 +2705,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             sys.exit()
+ 
+     if len(sj_post_error_simple_list) < sj_err_threshold:
+-        for j in xrange(sj_err_threshold - len(sj_post_error_simple_list)):
++        for j in range(sj_err_threshold - len(sj_post_error_simple_list)):
+             sj_post_error_simple_list.append(ses_match_char)
+ 
+     sj_post_error_simple_string = "".join(sj_post_error_simple_list)
+@@ -2755,7 +2756,7 @@ def sj_error_local_density(trans_obj):
+ 
+     all_sj_both_error_simple_list = []
+ 
+-    for i in xrange(max_exon_num-1):
++    for i in range(max_exon_num-1):
+         
+         this_bad_sj_flag = 0
+ 
+@@ -3001,7 +3002,7 @@ def collapse_transcripts(trans_obj_list,fiveprime_cap_flag,collapse_flag): #use
+     #track how much wobble for the starts and end in the collapse
+     start_wobble_list = []
+     end_wobble_list = []
+-    for i in xrange(max_exon_num): #go from 3 prime end
++    for i in range(max_exon_num): #go from 3 prime end
+         if strand == "+":
+             j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+         elif strand == "-":
+@@ -3275,7 +3276,7 @@ def collapse_transcripts(trans_obj_list,fiveprime_cap_flag,collapse_flag): #use
+     #Below: check start and end list to make sure there are no overlapping coordinates
+     prev_start = -1
+     prev_end = -1
+-    for i in xrange(len(collapse_start_list)):
++    for i in range(len(collapse_start_list)):
+         check_start = collapse_start_list[i]
+         check_end = collapse_end_list[i]
+         
+@@ -3348,9 +3349,9 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+         trans_gene_dict[trans_id] = gene_count
+         
+     
+-    for i in xrange(len(trans_obj_list)):
++    for i in range(len(trans_obj_list)):
+         trans_obj = trans_obj_list[i]
+-        for j in xrange(i+1,len(trans_obj_list)):
++        for j in range(i+1,len(trans_obj_list)):
+             o_trans_obj = trans_obj_list[j]
+ 
+             trans_id  = trans_obj.cluster_id
+@@ -3374,8 +3375,8 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+             
+             overlap_flag = 0
+             
+-            for i in xrange(num_exons): #search for overlapping exons
+-                for j in xrange(o_num_exons):
++            for i in range(num_exons): #search for overlapping exons
++                for j in range(o_num_exons):
+                     exon_start = exon_start_list[i]
+                     exon_end = exon_end_list[i]
+                     o_exon_start = o_exon_start_list[j]
+@@ -3509,7 +3510,7 @@ def iterate_sort_list(list_trans_pos_list,pos_index):
+         same_order_index_dict = {}  # same_order_index_dict[pos][index] = 1
+ 
+         # collect positions and index where the sort was equal
+-        for j in xrange(len(list_trans_pos_list)):
++        for j in range(len(list_trans_pos_list)):
+ 
+             trans_pos_line_split = list_trans_pos_list[j]
+             pos_element = trans_pos_line_split[pos_index]
+@@ -3588,7 +3589,7 @@ def sort_pos_trans_list(pos_trans_list,pos_trans_dict):
+         diff_pos = max_pos_num - len(trans_pos_line_split)
+ 
+         # pad out list so all pos lists have same number of elements
+-        for i in xrange(diff_pos):
++        for i in range(diff_pos):
+             trans_pos_line_split.append(0)
+ 
+         trans_pos_line_split_str = []
+@@ -3657,7 +3658,7 @@ def sort_transcripts(trans_obj_list):
+ 
+         num_exons = len(trans_exon_start_list)
+ 
+-        for i in xrange(num_exons):
++        for i in range(num_exons):
+             exon_start = trans_exon_start_list[i]
+             trans_pos_list.append(str(exon_start))
+             trans_pos_list.append(",")
+@@ -4884,7 +4885,7 @@ def detect_rt_switch(trans_obj): # looks for complementary structure in intronic
+     
+     bind_seq_dict = {} # bind_seq_dict[splice junction]['end seq'/'start seq'] = seq
+     
+-    for i in xrange(len(this_exon_starts)-1):
++    for i in range(len(this_exon_starts)-1):
+         
+         bind_flag = 0
+         start_index = i + 1
+@@ -4895,12 +4896,12 @@ def detect_rt_switch(trans_obj): # looks for complementary structure in intronic
+         rev_comp_end_seq = reverse_complement(end_seq)
+         
+         binding_dict = {} # binding_dict[bind seq] = 1
+-        for j in xrange(rt_window-bind_length):
++        for j in range(rt_window-bind_length):
+             bind_seq = start_seq[j:j+bind_length]
+             bind_seq_string = "".join(bind_seq)
+             binding_dict[bind_seq_string] = 1
+         
+-        for j in xrange(rt_window-bind_length):
++        for j in range(rt_window-bind_length):
+             bind_seq = rev_comp_end_seq[j:j+bind_length]
+             bind_seq_string = "".join(bind_seq)
+             if bind_seq_string in binding_dict:
+@@ -5285,7 +5286,7 @@ if run_mode_flag == "original":
+ 
+     multimap_missing_group_flag = 0
+ 
+-    for i in xrange(total_group_count+1):
++    for i in range(total_group_count+1):
+ 
+         if i not in group_trans_list_dict:
+             print("Missing group num, check for multi-maps in SAM file")
+@@ -5324,7 +5325,7 @@ if run_mode_flag == "original":
+ 
+             this_exon_start_list = trans_obj.exon_start_list
+             this_exon_end_list = trans_obj.exon_end_list
+-            for exon_index in xrange(len(this_exon_start_list)):
++            for exon_index in range(len(this_exon_start_list)):
+                 this_exon_start = this_exon_start_list[exon_index]
+                 this_exon_end = this_exon_end_list[exon_index]
+                 for this_coord in range(this_exon_start,this_exon_end):
+@@ -5557,7 +5558,7 @@ def process_loci(this_trans_obj_dict,trans_list,this_gene_count):
+                     collapse_start_error_nuc_list = []
+                     collapse_end_error_nuc_list = []
+ 
+-                    for exon_index in xrange(len(exon_start_list)):  # go from 3 prime end
++                    for exon_index in range(len(exon_start_list)):  # go from 3 prime end
+                         e_start_priority, e_end_priority, e_start_priority_error,e_end_priority_error = sj_error_priority_finder(solo_trans_obj, exon_index, max_exon_num)  ####################################
+ 
+                         collapse_sj_start_err_list.append(e_start_priority)
+diff --git a/tama_go/filter_transcript_models/tama_filter_primary_transcripts_orf.py b/tama_go/filter_transcript_models/tama_filter_primary_transcripts_orf.py
+index 963056e..d5f2ac2 100755
+--- a/tama_go/filter_transcript_models/tama_filter_primary_transcripts_orf.py
++++ b/tama_go/filter_transcript_models/tama_filter_primary_transcripts_orf.py
+@@ -109,7 +109,7 @@ class Transcript:
+         if block_start_list[-1] == "":
+             block_start_list.pop(-1)
+ 
+-        for i in xrange(len(block_size_list)):
++        for i in range(len(block_size_list)):
+             rel_exon_start = int(block_start_list[i])
+             rel_exon_end = rel_exon_start + int(block_size_list[i])
+ 
+diff --git a/tama_go/filter_transcript_models/tama_remove_fragment_models.py b/tama_go/filter_transcript_models/tama_remove_fragment_models.py
+index 969b9a3..5144cfa 100755
+--- a/tama_go/filter_transcript_models/tama_remove_fragment_models.py
++++ b/tama_go/filter_transcript_models/tama_remove_fragment_models.py
+@@ -162,7 +162,7 @@ class Transcript:
+         if block_start_list[-1] == "":
+             block_start_list.pop(-1)
+ 
+-        for i in xrange(len(block_size_list)):
++        for i in range(len(block_size_list)):
+             rel_exon_start = int(block_start_list[i])
+             rel_exon_end = rel_exon_start + int(block_size_list[i])
+ 
+@@ -178,7 +178,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+ 
+-        for i in xrange(len(self.exon_start_list)):
++        for i in range(len(self.exon_start_list)):
+ 
+             exon_start_string_list.append(str(self.exon_start_list[i]))
+             exon_end_string_list.append(str(self.exon_end_list[i]))
+@@ -233,7 +233,7 @@ class Transcript:
+ 
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.exon_start_list[i]
+             exon_end = self.exon_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -446,7 +446,7 @@ def compare_absorb_transcripts(a_trans_obj, b_trans_obj):
+     elif short_num_exons == 1:
+ 
+ 
+-        for exon_index in xrange(long_num_exons):
++        for exon_index in range(long_num_exons):
+             this_exon_start = long_exon_start_list[exon_index]
+             this_exon_end = long_exon_end_list[exon_index]
+ 
+@@ -494,8 +494,8 @@ def compare_absorb_transcripts(a_trans_obj, b_trans_obj):
+             no_match_flag = "no_match"
+ 
+     elif long_num_exons > 1 and short_num_exons > 1: # if both are multi exon models! ########################################
+-        for i in xrange(long_num_exons):
+-            for j in xrange(short_num_exons):
++        for i in range(long_num_exons):
++            for j in range(short_num_exons):
+ 
+ 
+                 long_this_exon_start = long_exon_start_list[i]
+@@ -659,7 +659,7 @@ def compare_absorb_transcripts(a_trans_obj, b_trans_obj):
+             # for long
+             prev_index_start = -1
+             prev_index_end = -1
+-            for i in xrange(len(long_index_start_list)):
++            for i in range(len(long_index_start_list)):
+                 long_index_start = long_index_start_list[i]
+                 long_index_end = long_index_end_list[i]
+ 
+@@ -680,7 +680,7 @@ def compare_absorb_transcripts(a_trans_obj, b_trans_obj):
+             # for short
+             prev_index_start = -1
+             prev_index_end = -1
+-            for i in xrange(len(short_index_start_list)):
++            for i in range(len(short_index_start_list)):
+                 short_index_start = short_index_start_list[i]
+                 short_index_end = short_index_end_list[i]
+ 
+diff --git a/tama_go/filter_transcript_models/tama_remove_polya_models_levels.py b/tama_go/filter_transcript_models/tama_remove_polya_models_levels.py
+index 34b3eec..9447601 100755
+--- a/tama_go/filter_transcript_models/tama_remove_polya_models_levels.py
++++ b/tama_go/filter_transcript_models/tama_remove_polya_models_levels.py
+@@ -184,7 +184,7 @@ for line in read_file_contents:
+         if len(this_source_read_line_split) > 2:
+ 
+             new_this_source_read_line_split = []
+-            for i in xrange(len(this_source_read_line_split) - 1):
++            for i in range(len(this_source_read_line_split) - 1):
+                 new_this_source_read_line_split.append(this_source_read_line_split[i+1])
+ 
+             new_this_source_read_line = ":".join(new_this_source_read_line_split)
+diff --git a/tama_go/filter_transcript_models/tama_remove_single_read_models_levels.py b/tama_go/filter_transcript_models/tama_remove_single_read_models_levels.py
+index 92b2be5..5442ded 100755
+--- a/tama_go/filter_transcript_models/tama_remove_single_read_models_levels.py
++++ b/tama_go/filter_transcript_models/tama_remove_single_read_models_levels.py
+@@ -145,7 +145,7 @@ for line in read_file_contents:
+         if len(this_source_read_line_split) > 2:
+ 
+             new_this_source_read_line_split = []
+-            for i in xrange(len(this_source_read_line_split) - 1):
++            for i in range(len(this_source_read_line_split) - 1):
+                 new_this_source_read_line_split.append(this_source_read_line_split[i+1])
+ 
+             new_this_source_read_line = ":".join(new_this_source_read_line_split)
+diff --git a/tama_go/format_converter/tama_convert_bed_gtf_ensembl_orf_nmd.py b/tama_go/format_converter/tama_convert_bed_gtf_ensembl_orf_nmd.py
+index 1b4827b..616ed5c 100755
+--- a/tama_go/format_converter/tama_convert_bed_gtf_ensembl_orf_nmd.py
++++ b/tama_go/format_converter/tama_convert_bed_gtf_ensembl_orf_nmd.py
+@@ -133,7 +133,7 @@ class Transcript:
+         three_utr_num_list = []
+ 
+         
+-        for i in xrange(int(self.num_exons)):
++        for i in range(int(self.num_exons)):
+             if self.strand == "+":
+                 e_index = i
+                 e_num = e_index + 1
+@@ -367,7 +367,7 @@ class Transcript:
+                 sys.exit()
+ 
+ 
+-        for i in xrange(len(five_utr_start_list)):
++        for i in range(len(five_utr_start_list)):
+             five_utr_start = five_utr_start_list[i]
+             five_utr_end = five_utr_end_list[i]
+             five_utr_e_num = five_utr_num_list[i]
+@@ -380,7 +380,7 @@ class Transcript:
+                 outfile.write(outline)
+                 outfile.write("\n")
+ 
+-        for i in xrange(len(three_utr_start_list)):
++        for i in range(len(three_utr_start_list)):
+             three_utr_start = three_utr_start_list[i]
+             three_utr_end = three_utr_end_list[i]
+             three_utr_e_num = three_utr_num_list[i]
+diff --git a/tama_go/format_converter/tama_format_gff_to_bed12_cupcake.py b/tama_go/format_converter/tama_format_gff_to_bed12_cupcake.py
+index e1253a2..241a698 100755
+--- a/tama_go/format_converter/tama_format_gff_to_bed12_cupcake.py
++++ b/tama_go/format_converter/tama_format_gff_to_bed12_cupcake.py
+@@ -79,7 +79,7 @@ class Transcript:
+         self.t_start = self.start_list[0] - 1 # adjust for bed indexing
+         self.t_end = self.end_list[-1]
+         
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             e_start = self.start_list[i]
+             e_rel_start = e_start - self.t_start - 1 # adjust for bed indexing
+             
+diff --git a/tama_go/format_converter/tama_format_gtf_to_bed12_stringtie.py b/tama_go/format_converter/tama_format_gtf_to_bed12_stringtie.py
+index 5d233e8..1c8d780 100755
+--- a/tama_go/format_converter/tama_format_gtf_to_bed12_stringtie.py
++++ b/tama_go/format_converter/tama_format_gtf_to_bed12_stringtie.py
+@@ -77,7 +77,7 @@ class Transcript:
+         self.t_start = self.start_list[0] - 1 # adjust for bed indexing
+         self.t_end = self.end_list[-1]
+         
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             e_start = self.start_list[i]
+             e_rel_start = e_start - self.t_start - 1 # adjust for bed indexing
+             
+diff --git a/tama_go/format_converter/tama_format_id_filter.py b/tama_go/format_converter/tama_format_id_filter.py
+index 8de803a..c2586fd 100755
+--- a/tama_go/format_converter/tama_format_id_filter.py
++++ b/tama_go/format_converter/tama_format_id_filter.py
+@@ -222,7 +222,7 @@ def id_parser(id_line):
+ 
+         delim_list = []
+ 
+-        for i in xrange(len(delim_line)):
++        for i in range(len(delim_line)):
+             delim_list.append(delim_line[i])
+ 
+         delim_string = "|".join(delim_list)
+diff --git a/tama_go/orf_nmd_predictions/tama_bed_extract_cds.py b/tama_go/orf_nmd_predictions/tama_bed_extract_cds.py
+index adab77d..272c4cb 100755
+--- a/tama_go/orf_nmd_predictions/tama_bed_extract_cds.py
++++ b/tama_go/orf_nmd_predictions/tama_bed_extract_cds.py
+@@ -135,7 +135,7 @@ class Transcript:
+ 
+         self.trans_coord_list = []
+         self.trans_coord_dict = {} # trans_coord_dict[coord] = index
+-        for i in xrange(int(self.num_exons)):
++        for i in range(int(self.num_exons)):
+ 
+             e_index = i
+             e_num = e_index + 1
+@@ -145,7 +145,7 @@ class Transcript:
+ 
+             e_length = e_end - e_start
+ 
+-            for j in xrange(e_length + 1):
++            for j in range(e_length + 1):
+                 pos_coord = e_start + j
+                 self.trans_coord_list.append(pos_coord)
+                 self.trans_coord_dict[pos_coord] = len(self.trans_coord_list) - 1
+@@ -227,7 +227,7 @@ class Transcript:
+         cds_e_start_list = []
+         cds_e_end_list = []
+ 
+-        for i in xrange(int(self.num_exons)):
++        for i in range(int(self.num_exons)):
+ 
+             e_index = i
+             e_num = e_index + 1
+@@ -266,7 +266,7 @@ class Transcript:
+         # convert to new bed line
+         new_block_list = []
+         new_starts_list = []
+-        for i in xrange(len(cds_e_start_list)):
++        for i in range(len(cds_e_start_list)):
+             cds_e_start = cds_e_start_list[i]
+             cds_e_end = cds_e_end_list[i]
+ 
+diff --git a/tama_go/orf_nmd_predictions/tama_orf_seeker.py b/tama_go/orf_nmd_predictions/tama_orf_seeker.py
+index 834324c..c3a19b6 100755
+--- a/tama_go/orf_nmd_predictions/tama_orf_seeker.py
++++ b/tama_go/orf_nmd_predictions/tama_orf_seeker.py
+@@ -270,7 +270,7 @@ def sort_orf_list(orf_list1,orf_list2,orf_list3):
+     top_orf_list = []
+     
+     #get longest 4 orf's, may be less if there aren't that many due to the stop codon assumption
+-    for i in xrange(4):
++    for i in range(4):
+         if i < len(orf_size_list):
+             for orf_obj in orf_size_dict[orf_size_list[i]]:
+                 
+diff --git a/tama_go/read_support/tama_read_support_levels.py b/tama_go/read_support/tama_read_support_levels.py
+index 639fd7c..ac86626 100755
+--- a/tama_go/read_support/tama_read_support_levels.py
++++ b/tama_go/read_support/tama_read_support_levels.py
+@@ -191,7 +191,7 @@ for line in filelist_file_contents:
+                 if len(this_source_read_line_split) > 2:
+ 
+                     new_this_source_read_line_split = []
+-                    for i in xrange(len(this_source_read_line_split) - 1):
++                    for i in range(len(this_source_read_line_split) - 1):
+                         new_this_source_read_line_split.append(this_source_read_line_split[i+1])
+ 
+                     new_this_source_read_line = ":".join(new_this_source_read_line_split)
+@@ -283,7 +283,7 @@ if merge_file != "no_merge":
+                 else:
+                     source_trans_id = source_trans_id_line.split("_")[num_underscore_fields - 1]
+                     source_name_underscore_list = []
+-                    for i in xrange(num_underscore_fields-1):
++                    for i in range(num_underscore_fields-1):
+                         source_name_underscore_list.append(source_trans_id_line.split("_")[i])
+ 
+                     source_name = "_".join(source_name_underscore_list)
+diff --git a/tama_go/sequence_cleanup/tama_flnc_polya_cleanup.py b/tama_go/sequence_cleanup/tama_flnc_polya_cleanup.py
+index a7d8d32..fe02fba 100755
+--- a/tama_go/sequence_cleanup/tama_flnc_polya_cleanup.py
++++ b/tama_go/sequence_cleanup/tama_flnc_polya_cleanup.py
+@@ -87,7 +87,7 @@ for seq_record in SeqIO.parse(fasta_file, "fasta"):
+     #print(seq_name)
+     
+     # use A and non A block method
+-    for i in xrange(len(seq_string_list)):
++    for i in range(len(seq_string_list)):
+         
+         block_end += 1
+         this_block_count += 1
+diff --git a/tama_merge.py b/tama_merge.py
+index 4c91ed1..7d0a80c 100755
+--- a/tama_merge.py
++++ b/tama_merge.py
+@@ -4,7 +4,8 @@ import re
+ import sys
+ import time
+ from Bio import SeqIO
+-from StringIO import StringIO
++# from StringIO import StringIO
++from io import StringIO
+ from Bio import AlignIO
+ import os
+ import argparse
+@@ -236,7 +237,7 @@ class Transcript:
+         if block_start_list[-1] == "":
+             block_start_list.pop(-1)
+         
+-        for i in xrange(len(block_size_list)):
++        for i in range(len(block_size_list)):
+             rel_exon_start = int(block_start_list[i])
+             rel_exon_end = rel_exon_start + int(block_size_list[i])
+             
+@@ -263,7 +264,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+         
+-        for i in xrange(len(self.exon_start_list)):
++        for i in range(len(self.exon_start_list)):
+             
+             exon_start_string_list.append(str(self.exon_start_list[i]))
+             exon_end_string_list.append(str(self.exon_end_list[i]))
+@@ -295,7 +296,7 @@ class Transcript:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.exon_start_list[i]
+             exon_end = self.exon_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -417,7 +418,7 @@ class Merged:
+         #print(collapse_start_list)
+         #print(collapse_end_list)
+         
+-        for i in xrange(len(collapse_start_list)):
++        for i in range(len(collapse_start_list)):
+             e_start = collapse_start_list[i]
+             e_end = collapse_end_list[i]
+             
+@@ -451,7 +452,7 @@ class Merged:
+             this_id_line_list.append(gene_id)
+             this_id_line_list.append(self.trans_id)
+ 
+-            for k in xrange(len(self.extra_gene_id_list)):
++            for k in range(len(self.extra_gene_id_list)):
+                 this_id_line_list.append(self.extra_gene_id_list[k])
+                 this_id_line_list.append(self.extra_trans_id_list[k])
+ 
+@@ -491,7 +492,7 @@ class Merged:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.collapse_start_list[i]
+             exon_end = self.collapse_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -530,7 +531,7 @@ class Merged:
+         
+         start_wobble_string_list = []
+         end_wobble_string_list = []
+-        for i in xrange(len(self.start_wobble_list)):
++        for i in range(len(self.start_wobble_list)):
+             start_wobble_string = str(self.start_wobble_list[i])
+             start_wobble_string_list.append(start_wobble_string)
+             end_wobble_string = str(self.end_wobble_list[i])
+@@ -635,7 +636,7 @@ def compare_transcripts_both_capped(trans_obj,o_trans_obj,fivecap_flag,o_fivecap
+         
+         all_match_flag = 1 # 1 if all matching and 0 if at least one not matching
+         
+-        for i in xrange(min_exon_num): # iterate from 3' end of transcript, strand corrected
++        for i in range(min_exon_num): # iterate from 3' end of transcript, strand corrected
+             
+             if strand == "+":
+                 j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+@@ -755,7 +756,7 @@ def compare_transcripts_capped_nocap(trans_obj,o_trans_obj,fivecap_flag,o_fiveca
+ 
+         all_match_flag = 1  # 1 if all matching and 0 if at least one not matching
+ 
+-        for i in xrange(min_exon_num):  # iterate from 3' end of transcript, strand corrected
++        for i in range(min_exon_num):  # iterate from 3' end of transcript, strand corrected
+ 
+             if strand == "+":
+                 j = -1 * (i + 1)  # iterate from last exon to account for possible 5' degradation for forward strand
+@@ -948,7 +949,7 @@ def compare_transcripts_both_nocap(trans_obj,o_trans_obj,fivecap_flag,o_fivecap_
+ 
+     all_match_flag = 1  # 1 if all matching and 0 if at least one not matching
+ 
+-    for i in xrange(min_exon_num):  # iterate from 3' end of transcript, strand corrected
++    for i in range(min_exon_num):  # iterate from 3' end of transcript, strand corrected
+ 
+         if strand == "+":
+             j = -1 * (i + 1)  # iterate from last exon to account for possible 5' degradation for forward strand
+@@ -1063,7 +1064,8 @@ def collapse_transcripts(trans_obj_list,collapse_flag): #use this to collapse tr
+     try:
+         collapse_flag
+     except NameError:
+-        print "collapse_flag not defined, using default of most commond ends"
++        # print "collapse_flag not defined, using default of most commond ends"
++        print("collapse_flag not defined, using default of most commond ends")
+         collapse_flag == "common_ends"
+     
+     max_exon_num = 0
+@@ -1110,7 +1112,7 @@ def collapse_transcripts(trans_obj_list,collapse_flag): #use this to collapse tr
+     #track how much wobble for the starts and end in the collapse
+     start_wobble_list = []
+     end_wobble_list = []
+-    for i in xrange(max_exon_num): #go from 3 prime end
++    for i in range(max_exon_num): #go from 3 prime end
+         if strand == "+":
+             j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+         elif strand == "-":
+@@ -1367,9 +1369,9 @@ def gene_group(trans_obj_list): #groups trans into genes, does not take into acc
+         trans_gene_dict[uniq_trans_id] = gene_count
+         
+     
+-    for i in xrange(len(trans_obj_list)):
++    for i in range(len(trans_obj_list)):
+         trans_obj = trans_obj_list[i]
+-        for j in xrange(i+1,len(trans_obj_list)):
++        for j in range(i+1,len(trans_obj_list)):
+             o_trans_obj = trans_obj_list[j]
+ 
+             uniq_trans_id  = trans_obj.uniq_trans_id
+@@ -1393,8 +1395,8 @@ def gene_group(trans_obj_list): #groups trans into genes, does not take into acc
+             
+             overlap_flag = 0
+             
+-            for i in xrange(num_exons): #search for overlapping exons
+-                for j in xrange(o_num_exons):
++            for i in range(num_exons): #search for overlapping exons
++                for j in range(o_num_exons):
+                     exon_start = exon_start_list[i]
+                     exon_end = exon_end_list[i]
+                     o_exon_start = o_exon_start_list[j]
+@@ -1528,7 +1530,7 @@ def iterate_sort_list(list_trans_pos_list,pos_index):
+         same_order_index_dict = {}  # same_order_index_dict[pos][index] = 1
+ 
+         # collect positions and index where the sort was equal
+-        for j in xrange(len(list_trans_pos_list)):
++        for j in range(len(list_trans_pos_list)):
+ 
+             trans_pos_line_split = list_trans_pos_list[j]
+             pos_element = trans_pos_line_split[pos_index]
+@@ -1627,7 +1629,7 @@ def sort_pos_trans_list(pos_trans_list,pos_trans_dict):
+         diff_pos = max_pos_num - len(trans_pos_line_split)
+ 
+         # pad out list so all pos lists have same number of elements
+-        for i in xrange(diff_pos):
++        for i in range(diff_pos):
+             trans_pos_line_split.append(0)
+ 
+         trans_pos_line_split_str = []
+@@ -1692,7 +1694,7 @@ def sort_transcripts(trans_obj_list,trans_obj_dict):
+ 
+         num_exons = len(trans_exon_start_list)
+ 
+-        for i in xrange(num_exons):
++        for i in range(num_exons):
+             exon_start = trans_exon_start_list[i]
+             trans_pos_list.append(str(exon_start))
+             trans_pos_list.append(",")
+@@ -3044,7 +3046,7 @@ def simplify_gene(trans_obj_list,trans_obj_dict): # goes through transcripts in
+     #### Collect transcripts into groups of capped and no cap
+     ############################################
+     
+-    for i in xrange(len(trans_obj_list)):
++    for i in range(len(trans_obj_list)):
+         trans_obj = trans_obj_list[i]
+         uniq_trans_id = trans_obj.uniq_trans_id
+         strand = trans_obj.strand
+@@ -3349,7 +3351,7 @@ def process_trans_group(trans_line_list, total_gene_count):
+                     match_trans_obj_list[0].uniq_trans_id
+                     e_start_trans_dict = {}
+                     e_end_trans_dict = {}
+-                    for z in xrange(len(exon_start_list)):
++                    for z in range(len(exon_start_list)):
+                         e_start_trans_dict[exon_start_list[z]] = {}
+                         e_start_trans_dict[exon_start_list[z]][match_trans_obj_list[0].uniq_trans_id] = 1
+                         
+@@ -3391,7 +3393,7 @@ def process_trans_group(trans_line_list, total_gene_count):
+                     if len(track_merge_gene_id_split) > 2:
+                         track_merge_gene_id_list = []
+ 
+-                        for t_index in xrange(len(track_merge_gene_id_split)-1):
++                        for t_index in range(len(track_merge_gene_id_split)-1):
+                             track_merge_gene_id_list.append(track_merge_gene_id_split[t_index])
+ 
+                         track_merge_gene_id = ".".join(track_merge_gene_id_list)
+diff --git a/tmp.py b/tmp.py
+index bb5b532..cfd72c6 100755
+--- a/tmp.py
++++ b/tmp.py
+@@ -4,7 +4,8 @@ import re
+ import sys
+ import time
+ from Bio import SeqIO
+-from StringIO import StringIO
++# from StringIO import StringIO
++from io import StringIO
+ from Bio import AlignIO
+ import os
+ import argparse
+@@ -371,7 +372,7 @@ def mapped_seq_length(cigar):
+     [cig_dig_list,cig_char_list] = cigar_list(cigar)
+     map_seq_length = 0
+     
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         if cig_flag == "H":
+@@ -403,7 +404,7 @@ def trans_coordinates(start_pos,cigar):
+ 
+     exon_start_list.append(int(start_pos))
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         if cig_flag == "H":
+@@ -517,7 +518,7 @@ def mismatch_seq(genome_seq,query_seq,genome_pos,seq_pos):
+     seq_mismatch_list = []
+     nuc_mismatch_list = []
+     
+-    for i in xrange(len(genome_seq)):
++    for i in range(len(genome_seq)):
+ 
+         genome_nuc = genome_seq[i]
+         read_nuc = query_seq[i]
+@@ -602,7 +603,7 @@ def calc_error_rate(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+     
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+         
+         #print(seq_pos)
+@@ -671,7 +672,7 @@ def calc_error_rate(start_pos,cigar,seq_list,scaffold,read_id):
+             all_nuc_mismatch_list.extend(nuc_mismatch_list)
+             
+             ### for variation detection start
+-            for mismatch_index in xrange(len(seq_mismatch_list)):
++            for mismatch_index in range(len(seq_mismatch_list)):
+                 var_pos = genome_mismatch_list[mismatch_index]
+                 seq_var_pos = seq_mismatch_list[mismatch_index]
+                 var_seq = seq_list[seq_var_pos]
+@@ -1008,7 +1009,7 @@ def calc_variation(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+ 
+         #print(seq_pos)
+@@ -1074,7 +1075,7 @@ def calc_variation(start_pos,cigar,seq_list,scaffold,read_id):
+ 
+ 
+             ### for variation detection start
+-            for mismatch_index in xrange(len(seq_mismatch_list)):
++            for mismatch_index in range(len(seq_mismatch_list)):
+                 var_pos = genome_mismatch_list[mismatch_index]
+                 seq_var_pos = seq_mismatch_list[mismatch_index]
+                 var_seq = seq_list[seq_var_pos]
+@@ -1182,7 +1183,7 @@ def calc_error_rate_lowmem(start_pos,cigar,seq_list,scaffold,read_id):
+     genome_pos = start_pos - 1 #adjust for 1 base to 0 base coordinates
+     seq_pos = 0
+ 
+-    for i in xrange(len(cig_dig_list)):
++    for i in range(len(cig_dig_list)):
+         cig_flag = cig_char_list[i]
+ 
+         #print(seq_pos)
+@@ -1581,7 +1582,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+ 
+-        for exon_index in xrange(len(self.exon_start_list)):
++        for exon_index in range(len(self.exon_start_list)):
+             exon_start_string_list.append(str(self.exon_start_list[exon_index]))
+             exon_end_string_list.append(str(self.exon_end_list[exon_index]))
+ 
+@@ -1602,7 +1603,7 @@ class Transcript:
+         self.sj_hash = 0
+ 
+ 
+-        for exon_index in xrange(len(self.exon_start_list)-1):
++        for exon_index in range(len(self.exon_start_list)-1):
+             self.sj_hash = self.sj_hash + (self.exon_start_list[exon_index+1] * self.exon_end_list[exon_index])
+ 
+ 
+@@ -1671,7 +1672,7 @@ class Transcript:
+         exon_start_string_list = []
+         exon_end_string_list = []
+         
+-        for i in xrange(len(self.exon_start_list)):
++        for i in range(len(self.exon_start_list)):
+             
+             exon_start_string_list.append(str(self.exon_start_list[i]))
+             exon_end_string_list.append(str(self.exon_end_list[i]))
+@@ -1712,7 +1713,7 @@ class Transcript:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.exon_start_list[i]
+             exon_end = self.exon_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -1826,7 +1827,7 @@ class Merged:
+         
+         relative_exon_start_list = []
+         exon_length_list = []
+-        for i in xrange(self.num_exons):
++        for i in range(self.num_exons):
+             exon_start = self.collapse_start_list[i]
+             exon_end = self.collapse_end_list[i]
+             exon_length = exon_end - exon_start
+@@ -1903,7 +1904,7 @@ class Merged:
+         
+         start_wobble_string_list = []
+         end_wobble_string_list = []
+-        for i in xrange(len(self.start_wobble_list)):
++        for i in range(len(self.start_wobble_list)):
+             start_wobble_string = str(self.start_wobble_list[i])
+             start_wobble_string_list.append(start_wobble_string)
+             end_wobble_string = str(self.end_wobble_list[i])
+@@ -1917,7 +1918,7 @@ class Merged:
+ 
+         collapse_sj_start_err_list_str = []
+         collapse_sj_end_err_list_str = []
+-        for i in xrange(len(self.collapse_sj_start_err_list)):
++        for i in range(len(self.collapse_sj_start_err_list)):
+             collapse_sj_start_err_list_str.append(str(self.collapse_sj_start_err_list[i]))
+             collapse_sj_end_err_list_str.append(str(self.collapse_sj_end_err_list[i]))
+ 
+@@ -2183,7 +2184,7 @@ def compare_transcripts(trans_obj,o_trans_obj,fiveprime_cap_flag,strand): #use t
+         
+         all_match_flag = 1 # 1 if all matching and 0 if at least one not matching
+         
+-        for i in xrange(min_exon_num):
++        for i in range(min_exon_num):
+             
+             if strand == "+":
+                 j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+@@ -2615,15 +2616,15 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             mismatch_position = int(sj_pre_error_string.split(".")[0])
+             mismatch_position += 1
+             if sj_pre_error_count == 1:
+-                for j in xrange(mismatch_position - 1):
++                for j in range(mismatch_position - 1):
+                     sj_pre_error_simple_list.append(ses_match_char)
+                     sj_pre_error_count += 1
+                 sj_pre_error_simple_list.append("X")
+                 sj_pre_error_count += 1
+             elif sj_pre_error_count > 1:
+                 m_pos_diff = mismatch_position - sj_pre_error_count
+-                # for j in xrange(m_pos_diff-1):
+-                for j in xrange(m_pos_diff):
++                # for j in range(m_pos_diff-1):
++                for j in range(m_pos_diff):
+                     sj_pre_error_simple_list.append(ses_match_char)
+                     sj_pre_error_count += 1
+                 sj_pre_error_simple_list.append("X")
+@@ -2631,7 +2632,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+         elif len(sj_pre_error_string.split(".")) == 1:
+ 
+             if sj_pre_error_string == "0":
+-                for j in xrange(sj_err_threshold):
++                for j in range(sj_err_threshold):
+                     sj_pre_error_simple_list.append(ses_match_char)
+ 
+             else:
+@@ -2641,23 +2642,23 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+                 cig_char = cig_char_list[0]
+ 
+                 if cig_char == "M":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append(ses_match_char)
+                         sj_pre_error_count += 1
+                 elif cig_char == "I":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("I")
+                         sj_pre_error_count += 1
+                 elif cig_char == "D":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("D")
+                         sj_pre_error_count += 1
+                 elif cig_char == "S":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("S")
+                         sj_pre_error_count += 1
+                 elif cig_char == "H":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_pre_error_simple_list.append("H")
+                         sj_pre_error_count += 1
+         else:
+@@ -2665,7 +2666,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             sys.exit()
+ 
+     if len(sj_pre_error_simple_list) < sj_err_threshold:
+-        for j in xrange(sj_err_threshold - len(sj_pre_error_simple_list)):
++        for j in range(sj_err_threshold - len(sj_pre_error_simple_list)):
+             sj_pre_error_simple_list.append(ses_match_char)
+ 
+     sj_pre_error_simple_list_reverse = sj_pre_error_simple_list
+@@ -2685,15 +2686,15 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             mismatch_position = int(sj_post_error_string.split(".")[0])
+             mismatch_position += 1
+             if sj_post_error_count == 1:
+-                for j in xrange(mismatch_position - 1):
++                for j in range(mismatch_position - 1):
+                     sj_post_error_simple_list.append(ses_match_char)
+                     sj_post_error_count += 1
+                 sj_post_error_simple_list.append("X")
+                 sj_post_error_count += 1
+             elif sj_post_error_count > 1:
+                 m_pos_diff = mismatch_position - sj_post_error_count
+-                # for j in xrange(m_pos_diff-1):
+-                for j in xrange(m_pos_diff):
++                # for j in range(m_pos_diff-1):
++                for j in range(m_pos_diff):
+                     sj_post_error_simple_list.append(ses_match_char)
+                     sj_post_error_count += 1
+                 sj_post_error_simple_list.append("X")
+@@ -2702,7 +2703,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+         elif len(sj_post_error_string.split(".")) == 1:
+ 
+             if sj_post_error_string == "0":
+-                for j in xrange(sj_err_threshold):
++                for j in range(sj_err_threshold):
+                     sj_post_error_simple_list.append(ses_match_char)
+ 
+             else:
+@@ -2712,23 +2713,23 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+                 cig_char = cig_char_list[0]
+ 
+                 if cig_char == "M":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append(ses_match_char)
+                         sj_post_error_count += 1
+                 elif cig_char == "I":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("I")
+                         sj_post_error_count += 1
+                 elif cig_char == "D":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("D")
+                         sj_post_error_count += 1
+                 elif cig_char == "S":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("S")
+                         sj_post_error_count += 1
+                 elif cig_char == "H":
+-                    for j in xrange(cig_dig):
++                    for j in range(cig_dig):
+                         sj_post_error_simple_list.append("H")
+                         sj_post_error_count += 1
+         else:
+@@ -2736,7 +2737,7 @@ def simple_sj_error(sj_pre_error_split,sj_post_error_split):
+             sys.exit()
+ 
+     if len(sj_post_error_simple_list) < sj_err_threshold:
+-        for j in xrange(sj_err_threshold - len(sj_post_error_simple_list)):
++        for j in range(sj_err_threshold - len(sj_post_error_simple_list)):
+             sj_post_error_simple_list.append(ses_match_char)
+ 
+     sj_post_error_simple_string = "".join(sj_post_error_simple_list)
+@@ -2787,7 +2788,7 @@ def sj_error_local_density(trans_obj):
+ 
+     all_sj_both_error_simple_list = []
+ 
+-    for i in xrange(max_exon_num-1):
++    for i in range(max_exon_num-1):
+         
+         this_bad_sj_flag = 0
+ 
+@@ -3033,7 +3034,7 @@ def collapse_transcripts(trans_obj_list,fiveprime_cap_flag,collapse_flag): #use
+     #track how much wobble for the starts and end in the collapse
+     start_wobble_list = []
+     end_wobble_list = []
+-    for i in xrange(max_exon_num): #go from 3 prime end
++    for i in range(max_exon_num): #go from 3 prime end
+         if strand == "+":
+             j = -1 * (i + 1) #iterate from last exon to account for possible 5' degradation for forward strand
+         elif strand == "-":
+@@ -3307,7 +3308,7 @@ def collapse_transcripts(trans_obj_list,fiveprime_cap_flag,collapse_flag): #use
+     #Below: check start and end list to make sure there are no overlapping coordinates
+     prev_start = -1
+     prev_end = -1
+-    for i in xrange(len(collapse_start_list)):
++    for i in range(len(collapse_start_list)):
+         check_start = collapse_start_list[i]
+         check_end = collapse_end_list[i]
+         
+@@ -3380,9 +3381,9 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+         trans_gene_dict[trans_id] = gene_count
+         
+     
+-    for i in xrange(len(trans_obj_list)):
++    for i in range(len(trans_obj_list)):
+         trans_obj = trans_obj_list[i]
+-        for j in xrange(i+1,len(trans_obj_list)):
++        for j in range(i+1,len(trans_obj_list)):
+             o_trans_obj = trans_obj_list[j]
+ 
+             trans_id  = trans_obj.cluster_id
+@@ -3406,8 +3407,8 @@ def gene_group(trans_list): #groups trans into genes, does not take into account
+             
+             overlap_flag = 0
+             
+-            for i in xrange(num_exons): #search for overlapping exons
+-                for j in xrange(o_num_exons):
++            for i in range(num_exons): #search for overlapping exons
++                for j in range(o_num_exons):
+                     exon_start = exon_start_list[i]
+                     exon_end = exon_end_list[i]
+                     o_exon_start = o_exon_start_list[j]
+@@ -3541,7 +3542,7 @@ def iterate_sort_list(list_trans_pos_list,pos_index):
+         same_order_index_dict = {}  # same_order_index_dict[pos][index] = 1
+ 
+         # collect positions and index where the sort was equal
+-        for j in xrange(len(list_trans_pos_list)):
++        for j in range(len(list_trans_pos_list)):
+ 
+             trans_pos_line_split = list_trans_pos_list[j]
+             pos_element = trans_pos_line_split[pos_index]
+@@ -3620,7 +3621,7 @@ def sort_pos_trans_list(pos_trans_list,pos_trans_dict):
+         diff_pos = max_pos_num - len(trans_pos_line_split)
+ 
+         # pad out list so all pos lists have same number of elements
+-        for i in xrange(diff_pos):
++        for i in range(diff_pos):
+             trans_pos_line_split.append(0)
+ 
+         trans_pos_line_split_str = []
+@@ -3689,7 +3690,7 @@ def sort_transcripts(trans_obj_list):
+ 
+         num_exons = len(trans_exon_start_list)
+ 
+-        for i in xrange(num_exons):
++        for i in range(num_exons):
+             exon_start = trans_exon_start_list[i]
+             trans_pos_list.append(str(exon_start))
+             trans_pos_list.append(",")
+@@ -4916,7 +4917,7 @@ def detect_rt_switch(trans_obj): # looks for complementary structure in intronic
+     
+     bind_seq_dict = {} # bind_seq_dict[splice junction]['end seq'/'start seq'] = seq
+     
+-    for i in xrange(len(this_exon_starts)-1):
++    for i in range(len(this_exon_starts)-1):
+         
+         bind_flag = 0
+         start_index = i + 1
+@@ -4927,12 +4928,12 @@ def detect_rt_switch(trans_obj): # looks for complementary structure in intronic
+         rev_comp_end_seq = reverse_complement(end_seq)
+         
+         binding_dict = {} # binding_dict[bind seq] = 1
+-        for j in xrange(rt_window-bind_length):
++        for j in range(rt_window-bind_length):
+             bind_seq = start_seq[j:j+bind_length]
+             bind_seq_string = "".join(bind_seq)
+             binding_dict[bind_seq_string] = 1
+         
+-        for j in xrange(rt_window-bind_length):
++        for j in range(rt_window-bind_length):
+             bind_seq = rev_comp_end_seq[j:j+bind_length]
+             bind_seq_string = "".join(bind_seq)
+             if bind_seq_string in binding_dict:
+@@ -5373,7 +5374,7 @@ if run_mode_flag == "original":
+ 
+     multimap_missing_group_flag = 0
+ 
+-    for i in xrange(total_group_count+1):
++    for i in range(total_group_count+1):
+ 
+         if i not in group_trans_list_dict:
+             print("Missing group num, check for multi-maps in SAM file")
+@@ -5412,7 +5413,7 @@ if run_mode_flag == "original":
+ 
+             this_exon_start_list = trans_obj.exon_start_list
+             this_exon_end_list = trans_obj.exon_end_list
+-            for exon_index in xrange(len(this_exon_start_list)):
++            for exon_index in range(len(this_exon_start_list)):
+                 this_exon_start = this_exon_start_list[exon_index]
+                 this_exon_end = this_exon_end_list[exon_index]
+                 for this_coord in range(this_exon_start,this_exon_end):
+@@ -5508,7 +5509,7 @@ if run_mode_flag == "original":
+                         collapse_start_error_nuc_list = []
+                         collapse_end_error_nuc_list = []
+ 
+-                        for exon_index in xrange(len(exon_start_list)):  # go from 3 prime end
++                        for exon_index in range(len(exon_start_list)):  # go from 3 prime end
+                             e_start_priority, e_end_priority, e_start_priority_error,e_end_priority_error = sj_error_priority_finder(solo_trans_obj, exon_index, max_exon_num)  ####################################
+ 
+                             collapse_sj_start_err_list.append(e_start_priority)
+@@ -5814,7 +5815,7 @@ def process_loci(this_trans_obj_dict,trans_list,this_gene_count):
+                     collapse_start_error_nuc_list = []
+                     collapse_end_error_nuc_list = []
+ 
+-                    for exon_index in xrange(len(exon_start_list)):  # go from 3 prime end
++                    for exon_index in range(len(exon_start_list)):  # go from 3 prime end
+                         e_start_priority, e_end_priority, e_start_priority_error,e_end_priority_error = sj_error_priority_finder(solo_trans_obj, exon_index, max_exon_num)  ####################################
+ 
+                         collapse_sj_start_err_list.append(e_start_priority)

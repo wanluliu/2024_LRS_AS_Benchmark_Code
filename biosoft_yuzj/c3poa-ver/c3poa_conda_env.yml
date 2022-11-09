@@ -1,0 +1,20 @@
+name: c3poa
+channels:
+    - bioconda
+    - conda
+    - conda-forge
+dependencies:
+    - python=>3.6
+    - numpy
+    - Cython
+    - setuptools
+    - wheel
+    - scipy
+    - tqdm
+    - racon
+    - blat
+    - mappy
+    - editdistance
+    - pip
+    - pip:
+        - pyabpoa==1.0.5
