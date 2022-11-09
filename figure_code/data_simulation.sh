@@ -29,6 +29,4 @@ for i in 20 40 60 80 100;do
 done
 
 # Isoform per gene
-for s in 1 3 5 7 9;do
-    true # TODO: ?
-done
+python -m yasim.helper.as_events ce11.ncbiRefSeq.gtf.gz # Generates 1 3 5 7 9.gtf
