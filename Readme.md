@@ -6,7 +6,7 @@ WARNING: The code here are snapshot of the latest working version of the article
 
 Directories:
 
-- `biosoft_yuzj`: Code used to install applicaions.
+- `biosoft`: Code used to install applicaions.
 - `gpmf_proc_profiler`: The profiler used in this project, still in development.
 - `yasim`: The Simulator used in this project, still in development.
 - `figure_code`: R and Python source code for plotting figures.

@@ -35,7 +35,7 @@ pip install dist/proc_profiler-0.3.2.tar.gz
 
 Usage: `python -m pid_monitor trace_cmd [CMD]`.
 
-e.g. To trace `sleep 5`, one can execute following command:
+e.g. To monitor resource consumption in `sleep 5`, one can execute following command:
 
 ```shell
 python -m pid_monitor trace_cmd sleep 5
