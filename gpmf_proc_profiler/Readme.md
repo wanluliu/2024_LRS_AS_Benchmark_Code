@@ -35,10 +35,10 @@ pip install dist/proc_profiler-0.3.2.tar.gz
 
 Usage: `python -m pid_monitor trace_cmd [CMD]`.
 
-e.g. To monitor resource consumption in `sleep 5`, one can execute following command:
+e.g. To monitor resource consumption in `xz -9 -T0 github_data_TGS.tar`, one can execute following command:
 
 ```shell
-python -m pid_monitor trace_cmd sleep 5
+python -m pid_monitor trace_cmd xz -9 -T0 github_data_TGS.tar
 ```
 
 You will get a output like:
@@ -48,7 +48,7 @@ CPU%: 7.74%; VIRTUALMEM: AVAIL: 39.39GiB/62.49GiB=(63.03%), BUFFERED: 4.70GiB, S
 +---------+---------+-------+----------+-------+----------+--------------+-------------+-------------------+
 |   PID   |   PPID  |  NAME |   STAT   |  CPU% | CPU_TIME | RESIDENT_MEM | NUM_THREADS | NUM_CHILD_PROCESS |
 +---------+---------+-------+----------+-------+----------+--------------+-------------+-------------------+
-| 2883092 | 2883045 | sleep | sleeping | 0.00% |   0.00   |  956.00KiB   |      1      |         0         |
+| 2883092 | 2883045 | xz    | sleeping | 2814% |  12.96   |  956.00MiB   |      36      |         0         |
 +---------+---------+-------+----------+-------+----------+--------------+-------------+-------------------+
 ```
 
