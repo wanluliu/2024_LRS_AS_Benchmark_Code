@@ -5,17 +5,17 @@ samtools sort "${BAM}" -o "${SORTED_BAM}"
 samtools sort "${SAM}" -o "${SORED_SAM}"
 samtools index "${SORTED_BAM}"
 
-# gffcompare
+# gffcompare: Obtain sensitivity and precision from simulated data analysis
 sh gffcompare.sh -r "${REFERENCE_GTF}" "${QUERY_GTF}" -o "${OUT_PREFIX}"
 sh get_gffcmp_csv.sh "${GFFCMP.STATS}" "${SOFTWARE}" "${SIMULATED_PARAM}" "${DATA_TYPE}" "${OUT}"
-##Obtain mean and sd
+##Obtain mean and standard error
 Rscript get_mean_sd.R -i "${IN_CSV}" -o "${OUT_DIR}" -s "${SOFTWARE_NAME}" --type {AS,ANNO,DEPTH}
 
-# SQANTI3
+# SQANTI3: Perform isoform classification
 sh sqanti3_qc.py.sh "${QUERY_GTF}" "${REFERENCE_GTF}" "${REFERENCE_FA}" -o "${OUT_PREFIX}"
 sh sqanti_result_conclude.sh "${SOFTWARE}" "${DATA_TYPE}"
 
-# BEDtools jaccard
+# BEDtools jaccard: Obtain jaccard statistics
 bedtools sort -i "${INPUT}" > "${OUTPUT_SORTED}"
 bedtools jaccard -a "${SORTED1_BED}" -b "${SORTED2_BED}" > "${OUTPUT}"
 

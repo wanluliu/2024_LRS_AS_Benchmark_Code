@@ -4,7 +4,7 @@ read_file_merge <- function(s) {
     data
 }
 
-#Isoform per gene
+#Isoform per gene (Figure 2B)
 setwd("D:/LabW/benchmark_results/raw_AS_size/transcript/transcript_no_ccs")
 flair_rep <- read_file_merge("flair")
 stringtie_rep <- read_file_merge("stringtie")
@@ -52,7 +52,7 @@ ggplot(merge_depth, aes(x = Iso_per_gene, y = mean_sensitivity, group = software
     xlab("Isoform per gene") +
     facet_grid(. ~ type)
 
-# Depth
+# Depth (Figure 2A)
 setwd("D:/LabW/benchmark_results/raw_depth/transcript/transcript_no_ccs")
 flair_rep <- read_file_merge("flair")
 stringtie_rep <- read_file_merge("stringtie")
@@ -100,7 +100,7 @@ ggplot(merge_depth, aes(x = depth, y = mean_sensitivity, group = software)) +
     xlab("Read depths") +
     facet_grid(. ~ type)
 
-#Annotation
+#Annotation (Figure 2C)
 setwd("D:/LabW/benchmark_results/raw_anno/transcript/transcript_no_ccs")
 flair_rep <- read_file_merge("flair")
 stringtie_rep <- read_file_merge("stringtie")
@@ -134,7 +134,7 @@ ggplot(merge_depth, aes(x = guidance, y = mean_sensitivity, group = software)) +
     ylab("Mean transcript level sensitivity %") +
     xlab("Annotation quality")
 
-##FLAMES support read = 10
+##FLAMES support read = 10 (Supplementary figure 4)
 setwd("D:/LabW/benchmark_results/raw_depth/transcript/transcript_no_ccs")
 FLAMES_d <- read.csv("FLAMES_old_mean_sd.csv")
 FLAMES_d_s <- FLAMES_d[, c(2, 3, 4, 5)]
@@ -159,7 +159,7 @@ ggplot(FLAMES_d_p, aes(x = factor(depth), y = mean_precision, group = software))
     ylab("Mean transcript level precision %")
 
 
-#Jaccard plot
+#Jaccard plot (Figure 4A)
 library(corrplot)
 setwd("D:/LabW/benchmark_results/jaccard")
 res <- read.csv("./drosophila/pacbio_testis.csv")
@@ -170,7 +170,7 @@ res <- data.matrix(res)
 corrplot(res, method = "color", addCoef.col = "dark grey", tl.cex = 0.8, type = "upper")
 
 
-#SQANTI result visualization
+#SQANTI result visualization (Figure 3)
 library(reshape2)
 library(ggplot2)
 library(dplyr)
@@ -200,7 +200,6 @@ result_long_addAll <- as.data.frame(filter(result_long, Dataset %in% c("human_ct
 result_long_addAll <- mutate(result_long_addAll, Percent = All / max(All))
 write.csv(result_long_addAll, "C:/Users/suyaqi/Desktop/human_control_pie.csv")
 
-
 # hierachical clustering
 library(eclust)
 result <- read.csv("C:/Users/suyaqi/Desktop/sqanti_cluster.csv", header = T)
@@ -211,7 +210,7 @@ hc = hclust(dist(df), "ave")
 plot(hc, hang = -1)
 
 
-# Computational performance
+# Computational performance (Figure 5)
 cp_result <- read.csvpd <- position_dodge(0.1) # move them .05 to the left and right
 ggplot(cp_result_noTAMA, aes(x = DATA_SIZE, y = MEAN_RESIDENT, group = SOFT)) +
     #geom_errorbar(aes(ymin=mean_precision-sd_precision, ymax=mean_precision+sd_precision,color=software), width=.1, position=pd)
@@ -239,12 +238,9 @@ ggplot(cp_result_noTAMA_time, aes(x = DATA_SIZE, y = CLOCK_TIME, group = SOFT)) 
     ylab("Mean time") +
     xlab("Data size")
 
-# Quality Control
+# Quality Control (Supplementary figure 2)
 # 1. Depths
 depths <- read.csv("C:/Users/suyaqi/Desktop/merged.csv", header = T)
-#ggplot(data = depths)+geom_boxplot(aes(x=factor(TARGET_DEPTH),y=SIMULATED_N_OF_READS,
-#                                     color=ERR_MODEL))+
-#scale_y_continuous(breaks = c(0,20,40,60,80,100,120),limits = c(0,300))
 get_mean <- function(depth, err) {
     df <- filter(depths, TARGET_DEPTH %in% as.numeric(depth)) %>% filter(ERR_MODEL %in% err)
     mean(df[, 3])
@@ -295,32 +291,20 @@ ggplot(data = Ref) +
     theme_bw() +
     theme(panel.grid = element_blank())
 
-#4. Read length distribution
+#4. Read length distribution (Supplementary figure 3)
 setwd("D:/LabW/benchmark_results/read_length_tsv")
 df <- read.table("depth_100_pbsim_nanopore2018.fq.nanoplotNanoPlot-data.tsv", header = T)
-#df<-data.frame(df[which(df$lengths<=20000),])
-#colnames(df)[1]<-"LEN"
 df$TYPE <- "nanopore2018"
 df2 <- read.table("depth_100_pbsim_nanopore2020.fq.nanoplotNanoPlot-data.tsv", header = T)
-#df2<-data.frame(df[which(df$lengths<=20000),])
 df2$TYPE <- "nanopore2020"
-#colnames(df2)[1]<-"LEN"
 df3 <- read.table("depth_100_pbsim_pacbio2016.fq.nanoplotNanoPlot-data.tsv", header = T)
-#df3<-data.frame(df[which(df$lengths<=20000),])
 df3$TYPE <- "pacbio2016"
-#colnames(df3)[1]<-"LEN"
 df4 <- read.table("depth_100_R94.fq.nanoplotNanoPlot-data.tsv", header = T)
-#df4<-data.frame(df[which(df$lengths<=20000),])
 df4$TYPE <- "R94"
-#colnames(df4)[1]<-"LEN"
 df5 <- read.table("depth_100_pbsim_clr.fq.nanoplotNanoPlot-data.tsv", header = T)
-#df5<-data.frame(df[which(df$lengths<=20000),])
 df5$TYPE <- "clr"
-#colnames(df5)[1]<-"LEN"
 df_m <- rbind(df, df2, df3, df4, df5)
 df_m <- data.frame(df_m[which(df_m$lengths <= 5000),])
-#hist(log(as.numeric(df[,-1]),base = exp(10)),col="sky blue")
-#plot(density(as.numeric(df[,-1])))
 ggplot(df_m) +
     geom_violin(aes(x = TYPE, y = lengths, fill = TYPE)) +
     scale_fill_brewer(palette = "RdBu") +
