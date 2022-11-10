@@ -5,7 +5,7 @@ read_file_merge <- function(s) {
 }
 
 #Isoform per gene (Figure 2B)
-setwd("D:/LabW/benchmark_results/raw_AS_size/transcript/transcript_no_ccs")
+setwd("./figure_data/AS_size")
 flair_rep <- read_file_merge("flair")
 stringtie_rep <- read_file_merge("stringtie")
 FLAMES_rep <- read_file_merge("FLAMES")
@@ -25,7 +25,7 @@ for (i in c("stringtie_unguide", "flair_unguide", "freddie", "tama", "unagi")) {
 }
 colnames(merge_depth)[7] <- "type"
 write.csv(merge_depth, "./merged_AS.csv")
-##make sensitivity & precison plotss
+##make sensitivity & precison plots
 pd <- position_dodge(0.1) # move them .05 to the left and right
 ggplot(merge_depth, aes(x = Iso_per_gene, y = mean_precision, group = software)) +
     geom_errorbar(aes(ymin = mean_precision - sd_precision, ymax = mean_precision + sd_precision, color = software), width = .1, position = pd) +
@@ -53,7 +53,7 @@ ggplot(merge_depth, aes(x = Iso_per_gene, y = mean_sensitivity, group = software
     facet_grid(. ~ type)
 
 # Depth (Figure 2A)
-setwd("D:/LabW/benchmark_results/raw_depth/transcript/transcript_no_ccs")
+setwd("./figure_data/depth")
 flair_rep <- read_file_merge("flair")
 stringtie_rep <- read_file_merge("stringtie")
 FLAMES_rep <- read_file_merge("FLAMES")
@@ -101,7 +101,7 @@ ggplot(merge_depth, aes(x = depth, y = mean_sensitivity, group = software)) +
     facet_grid(. ~ type)
 
 #Annotation (Figure 2C)
-setwd("D:/LabW/benchmark_results/raw_anno/transcript/transcript_no_ccs")
+setwd("figure_data/Anno")
 flair_rep <- read_file_merge("flair")
 stringtie_rep <- read_file_merge("stringtie")
 FLAMES_rep <- read_file_merge("FLAMES")
@@ -135,8 +135,8 @@ ggplot(merge_depth, aes(x = guidance, y = mean_sensitivity, group = software)) +
     xlab("Annotation quality")
 
 ##FLAMES support read = 10 (Supplementary figure 4)
-setwd("D:/LabW/benchmark_results/raw_depth/transcript/transcript_no_ccs")
-FLAMES_d <- read.csv("FLAMES_old_mean_sd.csv")
+setwd("figure_data/FLAMES_supp")
+FLAMES_d <- read.csv("FLAMES_old_mean_sd_depth.csv")
 FLAMES_d_s <- FLAMES_d[, c(2, 3, 4, 5)]
 FLAMES_d_p <- FLAMES_d[, c(2, 3, 6, 7)]
 ggplot(FLAMES_d_s, aes(x = factor(depth), y = mean_sensitivity, group = software)) +
@@ -161,7 +161,7 @@ ggplot(FLAMES_d_p, aes(x = factor(depth), y = mean_precision, group = software))
 
 #Jaccard plot (Figure 4A)
 library(corrplot)
-setwd("D:/LabW/benchmark_results/jaccard")
+setwd("figure_data/jaccard")
 res <- read.csv("./drosophila/pacbio_testis.csv")
 res <- res[, -1]
 rownames(res) <- c("stringtie2", "FLAMES", "flair", "talon", "freddie", "stringtie2_unguided", "flair_unguide")
@@ -174,7 +174,7 @@ corrplot(res, method = "color", addCoef.col = "dark grey", tl.cex = 0.8, type = 
 library(reshape2)
 library(ggplot2)
 library(dplyr)
-result <- read.csv("D:/LabW/benchmark_results/SQANTI/result.csv", header = T)
+result <- read.csv("figure_data/SQANTI_result.csv", header = T)
 
 result_long <- melt(result, id.vars = c("Software", "Dataset"),
                     variable.name = "Isoform_type",
@@ -193,16 +193,9 @@ bar <- ggplot() +
 pie <- bar + coord_polar("y", start = 0)
 pie
 
-
-result_long_addAll <- as.data.frame(filter(result_long, Dataset %in% c("human_ctrl", "human_control")) %>%
-                                        group_by(Software) %>%
-                                        mutate(All = sum(Number)))
-result_long_addAll <- mutate(result_long_addAll, Percent = All / max(All))
-write.csv(result_long_addAll, "C:/Users/suyaqi/Desktop/human_control_pie.csv")
-
 # hierachical clustering
 library(eclust)
-result <- read.csv("C:/Users/suyaqi/Desktop/sqanti_cluster.csv", header = T)
+result <- read.csv("figure_data/sqanti_cluster.csv", header = T)
 rownames(result) <- result[, 1]
 result <- result[, -1]
 df <- scale(result)
@@ -211,7 +204,8 @@ plot(hc, hang = -1)
 
 
 # Computational performance (Figure 5)
-cp_result <- read.csvpd <- position_dodge(0.1) # move them .05 to the left and right
+cp_result <- read.csv("figure_data/computational_peoform_table.csv", header = T)
+pd <- position_dodge(0.1) # move them .05 to the left and right
 ggplot(cp_result_noTAMA, aes(x = DATA_SIZE, y = MEAN_RESIDENT, group = SOFT)) +
     #geom_errorbar(aes(ymin=mean_precision-sd_precision, ymax=mean_precision+sd_precision,color=software), width=.1, position=pd)
     geom_line(aes(color = SOFT), position = pd) +
@@ -220,7 +214,7 @@ ggplot(cp_result_noTAMA, aes(x = DATA_SIZE, y = MEAN_RESIDENT, group = SOFT)) +
     theme_bw() +
     theme(panel.grid = element_blank()) +
     ylab("Mean resident memory") +
-    xlab("Data size")("D:/LabW/benchmark_results/computational_peoform_table.csv", header = T)
+    xlab("Data size")
 cp_result_noTAMA <- mutate(cp_result, MEAN_RESIDENT = MEAN_RESIDENT / (1024 * 1024 * 1024)) %>% filter(MEAN_RESIDENT <= 25)
 cp_result_tama <- mutate(cp_result, MEAN_RESIDENT = MEAN_RESIDENT / (1024 * 1024 * 1024)) %>% filter(MEAN_RESIDENT > 25)
 
@@ -239,8 +233,9 @@ ggplot(cp_result_noTAMA_time, aes(x = DATA_SIZE, y = CLOCK_TIME, group = SOFT)) 
     xlab("Data size")
 
 # Quality Control (Supplementary figure 2)
+setwd("figure_data/QC")
 # 1. Depths
-depths <- read.csv("C:/Users/suyaqi/Desktop/merged.csv", header = T)
+depths <- read.csv("depth.csv", header = T)
 get_mean <- function(depth, err) {
     df <- filter(depths, TARGET_DEPTH %in% as.numeric(depth)) %>% filter(ERR_MODEL %in% err)
     mean(df[, 3])
@@ -269,7 +264,7 @@ ggplot(data = mean_depth) +
 write.csv(mean_depth, "C:/Users/suyaqi/Desktop/merged_mean.csv")
 
 #2. AS size
-AS <- read.csv("C:/Users/suyaqi/Desktop/AS.csv", header = T)
+AS <- read.csv("AS.csv", header = T)
 ggplot(data = AS) +
     geom_boxplot(aes(x = factor(TARGETED_TRANSCRIPT_NUMBER), y = TRANSCRIPT_NUMBER,
                      fill = factor(TARGETED_TRANSCRIPT_NUMBER))) +
@@ -281,7 +276,7 @@ ggplot(data = AS) +
     theme(panel.grid = element_blank())
 
 #3. Reference annotation
-Ref <- read.csv("C:/Users/suyaqi/Desktop/ref.csv", header = T)
+Ref <- read.csv("ref.csv", header = T)
 Ref <- Ref %>% mutate(Real_perc = transcript_number / max(transcript_number))
 ggplot(data = Ref) +
     geom_bar(aes(x = factor(target_percent), y = Real_perc, fill = factor(target_percent)), stat = "identity") +
@@ -292,7 +287,7 @@ ggplot(data = Ref) +
     theme(panel.grid = element_blank())
 
 #4. Read length distribution (Supplementary figure 3)
-setwd("D:/LabW/benchmark_results/read_length_tsv")
+setwd("figure_data/read_lengths")
 df <- read.table("depth_100_pbsim_nanopore2018.fq.nanoplotNanoPlot-data.tsv", header = T)
 df$TYPE <- "nanopore2018"
 df2 <- read.table("depth_100_pbsim_nanopore2020.fq.nanoplotNanoPlot-data.tsv", header = T)
