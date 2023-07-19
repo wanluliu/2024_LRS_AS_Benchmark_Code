@@ -11,6 +11,9 @@ Directories:
 - `real_analysis`: Some code used in analysing real data.
 - `simulation`: Some code usd for simulation data generation and quality control.
 - `figure_code`: R and Python source code for plotting figures.
+- `proc_profiler_aggregation_code`: Source code for aggregating `gpmf_proc_profiler` output and plotting.
+
+Following software are moved to other places:
 
 - `gpmf_proc_profiler` had been published at <https://github.com/WanluLiuLab/labw_proc_profiler>.
 - `yasim` had been published at
