@@ -7,6 +7,11 @@ WARNING: The code here are snapshot of the latest working version of the article
 Directories:
 
 - `biosoft`: Code used to install applicaions.
-- `gpmf_proc_profiler`: The profiler used in this project, still in development.
-- `yasim`: The Simulator used in this project, still in development.
+- `latex pie_chart_gen`: generation of tabularized pie-chart using LaTeX.
+- `real_analysis`: Some code used in analysing real data.
+- `simulation`: Some code usd for simulation data generation and quality control.
 - `figure_code`: R and Python source code for plotting figures.
+
+- `gpmf_proc_profiler` had been published at <https://github.com/WanluLiuLab/labw_proc_profiler>.
+- `yasim` had been published at
+% TODO

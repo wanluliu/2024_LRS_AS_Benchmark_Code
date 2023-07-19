@@ -1,4 +1,0 @@
-# Ignores custome model but add bundled model
-model_*
-!model_qc_ccs
-!model_qc_clr
