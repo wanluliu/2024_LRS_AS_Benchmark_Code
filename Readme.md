@@ -10,7 +10,7 @@ Directories:
 - `latex pie_chart_gen`: generation of tabularized pie-chart using LaTeX.
 - `real_analysis`: Some code used in analysing real data.
 - `simulation`: Some code usd for simulation data generation and quality control.
-- `figure_code`: R and Python source code for plotting figures.
+- `benchmark_codes`: R and Python source code for plotting figures.
 - `proc_profiler_aggregation_code`: Source code for aggregating `gpmf_proc_profiler` output and plotting.
 
 Following software are moved to other places:
