@@ -1,11 +1,10 @@
-#!/usr/bin/env bash
 axel https://hgdownload.soe.ucsc.edu/goldenPath/ce11/bigZips/ce11.fa.gz
 gzip -dk ce11.fa.gz
 samtools faidx ce11.fa
 axel https://hgdownload.soe.ucsc.edu/goldenPath/ce11/bigZips/genes/ce11.ncbiRefSeq.gtf.gz
-python3 -m yasim generate_as_events -f ce11.fa -g ce11.ncbiRefSeq.gtf.gz -o ce11.sel.gtf
+python3 -m yasim alternative_splicing -f ce11.fa -g ce11.ncbiRefSeq.gtf.gz -o ce11.sel.gtf
 for d in 20 40 60 80 100; do
-    python3 -m yasim generate_depth -g ce11.sel.gtf -d "${d}" -o depth_"${d}".tsv
+    python3 -m yasim dge -g ce11.sel.gtf -d "${d}" -o depth_"${d}".tsv
     python3 -m yasim transcribe -f ce11.fa -g ce11.sel.gtf -d depth_"${d}".tsv -o depth_"${d}"_cnda.fa
     python3 -m yasim pbsim -e /root/miniconda3/envs/pbsim/bin/pbsim -F depth_"${d}"_cnda.fa.d -o depth_"${d}"_pbsim_clr &
 done
@@ -25,8 +24,9 @@ done
 
 # Extract percent GTF
 for i in 20 40 60 80 100;do
-    python -m bioutils sample_transcript -g ce11.sel.gtf --percent $i --out "${i}".gtf
+	python -m bioutils sample_transcript -g ce11.sel.gtf --percent $i --out "${i}".gtf
 done
 
 # Isoform per gene
-python -m yasim.helper.as_events ce11.ncbiRefSeq.gtf.gz # Generates 1 3 5 7 9.gtf
+for s in 1 3 5 7 9;do
+	[TODO]

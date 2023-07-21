@@ -2,6 +2,13 @@
 #StringTie2 (Guided; Run in unguide mode without "-G")
 sh stringtie.sh -L -G ${REFERENCE_GTF} -o $PREFIX_GTF ${INPUT_BAM} -p $THREADS
 
+#Bambu (guided)
+Rscript bambu_guide.R -b ${INPUT_BAM} -g ${REFERENCE_GTF} -f ${REFERENCE_FA} -o $PREFIX
+Rscript extract_bambu_construct.R -i ${BAMBU_OUT_DIR} -t ${TXT_FOR_TARGET_TRANSCRIPT}_
+
+#Bambu (unguided)
+Rscript bambu_unguide.R -b ${INPUT_BAM} -f ${REFERENCE_FA} -o $PREFIX
+
 #Flair (Guided)
 python2 bam2Bed12.py -i ${INPUT_BAM} > $PREFIX_BED12
 sh flair.py.sh correct -q ${INPUT_BED12} -g ${REFERENCE_FA} -f ${REFERENCE_GTF} -o $PREFIX

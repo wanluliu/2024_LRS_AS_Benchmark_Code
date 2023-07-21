@@ -127,3 +127,10 @@ g <- ggplot(all_data_mutated) +
 
 ggsave("last_read_completeness_hist.pdf", g, width = 20, height = 16)
 
+all_data_mutated_binned <- all_data_mutated %>%
+    dplyr::group_by(Condition) %>%
+    dplyr::mutate(bin = cut(READ_COMPLETENESS, breaks=seq(0, 1, by = 1 / 30)))
+all_data_mutated_binned_c <- all_data_mutated_binned %>%
+    dplyr::group_by(Condition, bin) %>%
+    dplyr::summarise(n=n()) %>%
+    tidyr::pivot_wider(id_cols =Condition , values_from = n, names_from = bin)
