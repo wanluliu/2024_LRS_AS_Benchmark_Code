@@ -16,5 +16,4 @@ Directories:
 Following software are moved to other places:
 
 - `gpmf_proc_profiler` had been published at <https://github.com/WanluLiuLab/labw_proc_profiler>.
-- `yasim` had been published at
-% TODO
+- `yasim` had been published at <https://github.com/WanluLiuLab/yasim>. Documentation of YASIM can be found via: <https://labw.org/yasim-docs/>.
