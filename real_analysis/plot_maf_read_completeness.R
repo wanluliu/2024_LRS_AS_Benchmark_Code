@@ -96,11 +96,12 @@ all_data_mutated <- all_data %>%
     dplyr::transmute(
         Condition = Condition,
         TRANSCRIPT_ID = ALIGNED_TRANSCRIPT_ID,
-        READ_COMPLETENESS = READ_LENGTH / TRANSCRIBED_LENGTH
+        READ_COMPLETENESS = READ_LENGTH / TRANSCRIBED_LENGTH,
+        TRANSCRIBED_LENGTH=TRANSCRIBED_LENGTH
     )
 
 g <- ggplot(all_data_mutated) +
-    geom_density_ridges(
+    ggridges::geom_density_ridges(
         aes(
             x = READ_COMPLETENESS,
             y = Condition
@@ -126,6 +127,22 @@ g <- ggplot(all_data_mutated) +
     ggtitle("Read Completeness of all conditions")
 
 ggsave("last_read_completeness_hist.pdf", g, width = 20, height = 16)
+
+g <- ggplot(all_data_mutated, 
+            aes(
+                x = TRANSCRIBED_LENGTH,
+                y = READ_COMPLETENESS
+            )) +
+    geom_hex(bins=40) +
+    # stat_summary(fun=mean, geom="line", aes(group=1), color="white")  + 
+    facet_wrap(. ~ Condition, scales = "free") +
+    viridis::scale_fill_viridis(name="N. Reads", trans="log10") +
+    scale_x_continuous("Transcript length", limits = c(0, 20000)) +
+    scale_y_continuous("Read completeness", limits = c(0, 1.2)) +
+    theme_bw() +
+    ggtitle("Read Completeness (Alt Fmt) of all conditions")
+ggsave("last_read_completeness_f1e.pdf", g, width = 20, height = 16)
+
 
 all_data_mutated_binned <- all_data_mutated %>%
     dplyr::group_by(Condition) %>%
