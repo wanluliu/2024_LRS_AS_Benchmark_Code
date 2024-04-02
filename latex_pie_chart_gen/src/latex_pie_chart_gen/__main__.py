@@ -64,6 +64,7 @@ def gen_table(
         src_fig_dir_path: str,
         dst_coeff_tex_file_path: str,
         dst_table_tex_file_path: str,
+        log: bool,
 ) -> None:
     """
     Generate Table of Figures in LaTeX.
@@ -76,6 +77,8 @@ def gen_table(
     col_names.remove("Software")
     col_names.remove("Dataset")
     df["_sum"] = df.sum(axis=1, numeric_only=True)
+    if log:
+        df["_sum"] = df["_sum"].apply(lambda x: math.log(x + 1))
     unique_software = df.Software.unique()
     unique_data = df.Dataset.unique()
 
@@ -104,9 +107,12 @@ def gen_table(
                 except ValueError:
                     _lh.error("Software %s data %s have !=1 data!", software, data)
                     sys.exit(1)
-                width = math.sqrt(this_sum / all_software_max)
+                # if log:
+                #     width = math.sqrt(this_sum / all_software_max)
+                # else:
+                width = this_sum / all_software_max
                 # LaTeX does not support pathsep in \\
-                fig_file_path = r"/".join((src_fig_dir_path, f"{software}-{data}.pdf"))
+                fig_file_path = r"/".join((src_fig_dir_path.replace("\\", "/"), f"{software}-{data}.pdf"))
                 if not os.path.exists(fig_file_path):
                     raise FileNotFoundError(f"File {fig_file_path} not found!")
                 this_data_str += r"\wrapfig{\includegraphics[width=%.4f\linewidth]{%s}}" % (width, fig_file_path)
@@ -115,6 +121,26 @@ def gen_table(
             writer.write("\n")
         writer.write(r"\end{tabular}")
         writer.write("\n")
+        writer.write("\n")
+        writer.write(r"""\begin{tabular}{cc}""")
+        writer.write("\n")
+        for width in (100, 60, 20):
+            writer.write(
+                r"\wrapfig{\includegraphics[width=%f\linewidth]{%s}} & %d" % (
+                    width / 100 if not log else math.log(width) / math.log(100),
+                    r"/".join((src_fig_dir_path.replace("\\", "/"), "full.pdf")),
+                    width,
+                )
+            )
+            writer.write(r"\%\\")
+            writer.write("\n")
+        writer.write(r"\end{tabular}")
+        writer.write("\n")
+        writer.write("\n")
+        writer.write(r"\includegraphics[width=\linewidth]{%s}" % r"/".join((src_fig_dir_path.replace("\\", "/"), "legend.pdf")))
+        writer.write("\n")
+        writer.write("\n")
+
         _lh.info("GEN_TABLE: FIN")
 
 
@@ -151,6 +177,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--data_csv_file_path")
     parser.add_argument("-o", "--out_pdf_file_path")
+    parser.add_argument("--log", action="store_true")
     parser.add_argument("-t", "--tmp_dir_path", default=os.path.abspath("tmp"))
     args = parser.parse_args(sys.argv[1:])
 
@@ -189,7 +216,8 @@ if __name__ == "__main__":
         src_data_csv_file_path=data_csv_file_path,
         src_fig_dir_path=fig_dir_path,
         dst_coeff_tex_file_path=os.path.join(_tmp_dir_path, "coefficient.tex"),
-        dst_table_tex_file_path=os.path.join(_tmp_dir_path, "table.tex")
+        dst_table_tex_file_path=os.path.join(_tmp_dir_path, "table.tex"),
+        log=args.log,
     )
     compile_latex(
         tmp_dir_path=_tmp_dir_path,

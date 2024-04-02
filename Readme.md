@@ -1,4 +1,4 @@
-# Readme for `2022_TGS_AS_Benchmark`
+# Readme for `2024_LRS_AS_Benchmark_Code`
 
 This repository contains code for article [Comprehensive Assessment of Isoform Detection Methods for Third-Generation Sequencing Data](https://doi.org/10.21203/rs.3.rs-2156731/v1).
 
